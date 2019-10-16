@@ -24,9 +24,9 @@
 
         <div class="btn-container">
 			<dot:Button Text="{resource: Texts.Label_SignIn}" IsSubmitButton="true" Click="{command: SignIn()}" class="page-button"/>
-			
-		    <dot:RouteLink RouteName="Authentication_Register" Text="{resource: Texts.Label_Register}" class="page-button"/>
-		</div>
+		
+		    <bs:LinkButton Click="{command: GoToRegistration()}" Type="Link" Text="Register" Validation.Enabled="false" />
+        </div>
     </div>
 </dot:Content>
 

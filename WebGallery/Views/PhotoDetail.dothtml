@@ -1,0 +1,7 @@
+﻿@viewModel WebGallery.ViewModels.PhotoDetailViewModel, WebGallery
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+</dot:Content>
+

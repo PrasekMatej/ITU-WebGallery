@@ -46,5 +46,10 @@ namespace WebGallery.ViewModels.Authentication
                 Context.RedirectToRoute("Default", allowSpaRedirect: false);
             }
         }
+
+        public void GoToRegistration()
+        {
+            Context.RedirectToRoute("Register");
+        }
     }
 }

@@ -20,7 +20,10 @@ namespace WebGallery
         private void ConfigureRoutes(DotvvmConfiguration config, string applicationPath)
         {
             config.RouteTable.Add("Default", "", "Views/Default.dothtml");
-            config.RouteTable.AutoDiscoverRoutes(new DefaultRouteStrategy(config));
+            config.RouteTable.Add("PhotoDetail", "PhotoDetail", "Views/PhotoDetail.dothtml");
+            config.RouteTable.Add("SignIn", "SignIn", "Views/Authentication/SignIn.dothtml");
+            config.RouteTable.Add("Register", "Register", "Views/Authentication/Register.dothtml");
+            //config.RouteTable.AutoDiscoverRoutes(new DefaultRouteStrategy(config));    
         }
 
         private void ConfigureControls(DotvvmConfiguration config, string applicationPath)
