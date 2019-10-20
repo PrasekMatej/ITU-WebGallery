@@ -1,32 +1,24 @@
 ﻿@viewModel WebGallery.ViewModels.Authentication.SignInViewModel, WebGallery
-@masterPage Views/MasterPage.dotmaster
-@import WebGallery.Resources
+@masterPage Views/Authentication/NonAuthenticatedMasterPage.dotmaster
 
 
 <dot:Content ContentPlaceHolderID="MainContent">
-
-    <div class="page-box">
-
-        <div Validator.Value="{value: UserName}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            {{resource: Texts.Label_UserName}}
-            <dot:TextBox Text="{value: UserName}" class="page-input"/>
-        </div>
-            <div Validator.Value="{value: Password}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-             {{resource: Texts.Label_Password}}
-             <dot:TextBox Text="{value: Password}" Type="Password" class="page-input" />
-        </div>
-
-        <div class="btn-container">
-			<dot:Button Text="{resource: Texts.Label_SignIn}" IsSubmitButton="true" Click="{command: SignIn()}" class="page-button"/>
-		
-		    <bs:LinkButton Click="{command: GoToRegistration()}" Type="Link" Text="Register" Validation.Enabled="false" />
-        </div>
-    </div>
+    <bs:Card class="loginBox">
+        <HeaderTemplate>
+            <h1>Web Gallery</h1>
+        </HeaderTemplate>
+        <Content>
+            <bs:CardBody>
+                <bs:Form>
+                    <bs:TextBoxFormGroup Text="{value: UserName}" LabelText="Username" Validator.Value="{value: UserName}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                    <bs:TextBoxFormGroup Text="{value: Password}" TextBoxType="Password" LabelText="Password" Validator.Value="{value: Password}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                </bs:Form>
+            </bs:CardBody>
+        </Content>
+        <FooterTemplate>
+            <dot:RouteLink RouteName="Register" Text="Register" Validation.Enabled="false" />
+            <bs:Button Text="SignIn" Click="{command: SignIn()}" class="mainBtn" />
+        </FooterTemplate>
+    </bs:Card>
 </dot:Content>
 

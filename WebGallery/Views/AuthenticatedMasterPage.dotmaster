@@ -1,0 +1,20 @@
+﻿@viewModel WebGallery.ViewModels.AuthenticatedMasterPageViewModel, WebGallery
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+    <bs:ResponsiveNavigation HeaderImageUrl="https://picsum.photos/150/25" HeaderText="Web Gallery  " HeaderLinkUrl="/" Theme="Dark">
+        <LeftAlignedItems>
+
+        </LeftAlignedItems>
+        <RightAlignedItems>
+            <bs:DropDownButton Text="{resource: Username}" MenuAlignment="Right">
+                <bs:DropDownButtonItem Click="{command: SignOut()}">
+                    SignOut <dc:FAIcon Icon="sign_out_alt_solid" />
+                </bs:DropDownButtonItem>
+            </bs:DropDownButton>
+        </RightAlignedItems>
+    </bs:ResponsiveNavigation>
+
+    <dot:SpaContentPlaceHolder ID="MainContent" />
+</dot:Content>
+

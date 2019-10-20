@@ -12,11 +12,10 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using WebGallery.BL.Services;
-using WebGallery.Resources;
 
 namespace WebGallery.ViewModels.Authentication
 {
-    public class RegisterViewModel : MasterPageViewModel, IValidatableObject
+    public class RegisterViewModel : NonAuthenticatedMasterPage, IValidatableObject
     {
         private readonly UserService userService;
 
@@ -57,7 +56,7 @@ namespace WebGallery.ViewModels.Authentication
         {
             if (Password != ConfirmPassword)
             {
-                yield return new ValidationResult(Texts.Error_PasswordsMatch, new[] { nameof(ConfirmPassword) });
+                yield return new ValidationResult("Passwords do not match.", new[] { nameof(ConfirmPassword) });
             }
         }
 

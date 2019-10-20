@@ -1,39 +1,25 @@
 ﻿@viewModel WebGallery.ViewModels.Authentication.RegisterViewModel, WebGallery
-@masterPage Views/MasterPage.dotmaster
-@import WebGallery.Resources
+@masterPage Views/Authentication/NonAuthenticatedMasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
-
-    <div class="page-box">
-        <div Validator.Value="{value: UserName}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            {{resource: Texts.Label_UserName}}
-            <dot:TextBox Text="{value: UserName}" class="page-input"/>
-        </div>
-
-        <div Validator.Value="{value: Password}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            {{resource: Texts.Label_Password}}
-            <dot:TextBox Text="{value: Password}" Type="Password" class="page-input"/>
-        </div>
-    
-        <div Validator.Value="{value: ConfirmPassword}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            {{resource: Texts.Label_ConfirmPassword}}
-            <dot:TextBox Text="{value: ConfirmPassword}" Type="Password" class="page-input"/>
-        </div>
-
-        <dot:ValidationSummary Validator.HideWhenValid="true"/>
-		<div class="btn-container">
-			<dot:Button Text="{resource: Texts.Label_Register}" IsSubmitButton="true" Click="{command: Register()}" class="page-button"/>
-		</div>
-    </div>
-    
+    <bs:Card class="loginBox">
+        <HeaderTemplate>
+            <h1>Web Gallery</h1>
+        </HeaderTemplate>
+        <Content>
+            <bs:CardBody>
+                <bs:Form>
+                    <bs:TextBoxFormGroup Text="{value: UserName}" LabelText="Username" Validator.Value="{value: Password}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                    <bs:TextBoxFormGroup Text="{value: Password}" TextBoxType="Password" LabelText="Password" Validator.Value="{value: Password}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                    <bs:TextBoxFormGroup Text="{value: ConfirmPassword}" TextBoxType="Password" LabelText="Password confirmation" Validator.Value="{value: ConfirmPassword}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                </bs:Form>
+                <dot:ValidationSummary class="has-error" Validator.HideWhenValid="true" />
+            </bs:CardBody>
+        </Content>
+        <FooterTemplate>
+            <dot:RouteLink RouteName="SignIn" Text="Sign In" Validation.Enabled="false" />
+            <bs:Button Text="Register" IsSubmitButton="true" Click="{command: Register()}" class="mainBtn" />
+        </FooterTemplate>
+    </bs:Card>
 </dot:Content>
 

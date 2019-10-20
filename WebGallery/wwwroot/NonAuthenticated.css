@@ -1,0 +1,24 @@
+﻿body, html {
+    /* The image used */
+    background-image: url("https://picsum.photos/1920/1080");
+    /* Full height */
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loginBox {
+    width: 500px;
+    margin: auto;
+    top: 25%;
+}
+
+    .loginBox > .card-header {
+        text-align: center;
+    }
+
+    .loginBox > .card-footer > .mainBtn {
+        float: right;
+    }

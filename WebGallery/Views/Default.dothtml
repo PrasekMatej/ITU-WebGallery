@@ -1,6 +1,6 @@
 ﻿@viewModel WebGallery.ViewModels.DefaultViewModel, WebGallery
-@masterPage Views/MasterPage.dotmaster
-@import WebGallery.Resources
+@masterPage Views/AuthenticatedMasterPage.dotmaster
+
 <dot:Content ContentPlaceHolderID="MainContent">
 
 </dot:Content>

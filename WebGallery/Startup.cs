@@ -47,11 +47,11 @@ namespace WebGallery
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<StudentDbContext>()
                 .AddDefaultTokenProviders();
-            services.ConfigureApplicationCookie(o => { o.LoginPath = new PathString("/Authentication/SignIn"); });
+            services.ConfigureApplicationCookie(o => { o.LoginPath = new PathString("/SignIn"); });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Authentication/SignIn";
+                    options.LoginPath = "/SignIn";
                 });
             services.AddDotVVM<DotvvmStartup>();
         }

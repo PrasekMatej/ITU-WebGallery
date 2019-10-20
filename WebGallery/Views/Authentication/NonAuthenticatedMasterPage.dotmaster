@@ -1,0 +1,9 @@
+﻿@viewModel WebGallery.ViewModels.Authentication.NonAuthenticatedMasterPage, WebGallery
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+    <dot:RequiredResource Name="NonAuthenticatedStyles" />
+
+    <dot:ContentPlaceHolder ID="MainContent" />
+</dot:Content>
+

@@ -14,7 +14,7 @@ using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels.Authentication
 {
-    public class SignInViewModel : MasterPageViewModel
+    public class SignInViewModel : NonAuthenticatedMasterPage
     {
 
         private readonly UserService userService;
@@ -45,11 +45,6 @@ namespace WebGallery.ViewModels.Authentication
                 await Context.GetAuthentication().SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(identity));
                 Context.RedirectToRoute("Default", allowSpaRedirect: false);
             }
-        }
-
-        public void GoToRegistration()
-        {
-            Context.RedirectToRoute("Register");
         }
     }
 }

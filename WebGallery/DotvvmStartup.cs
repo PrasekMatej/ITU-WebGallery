@@ -1,4 +1,5 @@
-﻿using DotVVM.Framework.Configuration;
+﻿using DotVVM.Contrib;
+using DotVVM.Framework.Configuration;
 using DotVVM.Framework.Controls.Bootstrap4;
 using DotVVM.Framework.ResourceManagement;
 using DotVVM.Framework.Routing;
@@ -11,7 +12,6 @@ namespace WebGallery
         // For more information about this class, visit https://dotvvm.com/docs/tutorials/basics-project-structure
         public void Configure(DotvvmConfiguration config, string applicationPath)
         {
-            config.AddBootstrap4Configuration();
             ConfigureRoutes(config, applicationPath);
             ConfigureControls(config, applicationPath);
             ConfigureResources(config, applicationPath);
@@ -28,7 +28,8 @@ namespace WebGallery
 
         private void ConfigureControls(DotvvmConfiguration config, string applicationPath)
         {
-            // register code-only controls and markup controls
+            config.AddBootstrap4Configuration();
+            config.AddContribFAIconConfiguration();
         }
 
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
@@ -37,6 +38,10 @@ namespace WebGallery
             config.Resources.Register("Styles", new StylesheetResource()
             {
                 Location = new UrlResourceLocation("~/styles.css")
+            });
+            config.Resources.Register("NonAuthenticatedStyles", new StylesheetResource()
+            {
+                Location = new UrlResourceLocation("~/NonAuthenticated.css")
             });
         }
 

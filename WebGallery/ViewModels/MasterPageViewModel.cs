@@ -11,7 +11,7 @@ namespace WebGallery.ViewModels
 {
     public class MasterPageViewModel : DotvvmViewModelBase
     {
-		public async Task SignOut()
+        public async Task SignOut()
         {
             await Context.GetAuthentication().SignOutAsync(IdentityConstants.ApplicationScheme);
             Context.RedirectToRoute("Default", null, false, false);
