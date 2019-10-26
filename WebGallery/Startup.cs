@@ -36,12 +36,12 @@ namespace WebGallery
             services.AddWebEncoders();
             services.AddTransient(typeof(UserService));
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<StudentDbContext>(options =>
+                .AddDbContext<GalleryDbContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 });
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<StudentDbContext>()
+                .AddEntityFrameworkStores<GalleryDbContext>()
                 .AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(o => { o.LoginPath = new PathString("/SignIn"); });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
