@@ -1,0 +1,131 @@
+﻿.Map {
+    width: 100%;
+    height: 199px;
+}
+
+#InfoWindow .modal-footer {
+    padding: 0;
+}
+
+.carousel-item {
+    height: 100vh;
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+@-webkit-keyframes fadein {
+    from {
+        opacity: 0.1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadein {
+    from {
+        opacity: 0.1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0.1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.1;
+    }
+}
+
+@-moz-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.1;
+    }
+}
+
+#navigation, .fading {
+    -webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadeout 1s; /* Firefox < 16 */
+    -o-animation: fadeout 1s; /* Opera < 12.1 */
+    animation: fadeout 1s;
+    opacity: 0.1;
+}
+
+#navigation:hover, .fading:hover {
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s; /* Firefox < 16 */
+    -o-animation: fadein 1s; /* Opera < 12.1 */
+    animation: fadein 1s;
+    opacity: 1;
+}
+
+.BackgroundNavigationLeft {
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.70) 55%, rgba(0,0,0,0) 100%); 
+}
+
+.BackgroundNavigationRight {
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.70) 45%, rgba(0,0,0,1) 100%); 
+}
+
+.BackgroundNavigationBottom { 
+    background: rgb(0,0,0);
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7231093120842087) 55%, rgba(0,0,0,0) 100%); 
+}
+
+.Navigation {
+    height: 100%;
+    width: 10%;
+}
+
+.NavigationLeft {
+    position: fixed;
+    left: 0;
+}
+
+.NavigationRight {
+    position: fixed;
+    right: 0;
+}
+
+.NavigationIcon {
+    position: fixed;
+    top: 50%;
+    color: white;
+    font-size: 3em;
+}

@@ -29,6 +29,7 @@ namespace WebGallery
         {
             config.AddBootstrap4Configuration();
             config.AddContribFAIconConfiguration();
+            config.AddContribGoogleMapConfiguration("AIzaSyCGPSZzWUXLrGJsYQb4QnMH4Yl4rf1b9V0");
         }
 
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
@@ -41,6 +42,11 @@ namespace WebGallery
             config.Resources.Register("NonAuthenticatedStyles", new StylesheetResource()
             {
                 Location = new UrlResourceLocation("~/NonAuthenticated.css")
+            });
+            config.Resources.Register("PhotoDetailStyles", new StylesheetResource()
+            {
+                Location = new UrlResourceLocation("~/PhotoDetail.css"),
+                Dependencies = new []{ "Styles" }
             });
         }
 

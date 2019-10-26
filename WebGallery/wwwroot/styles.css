@@ -5,3 +5,19 @@
 .has-error li {
     color: red;
 }
+
+.AlignRight {
+    text-align: right;
+}
+
+.AlignLeft {
+    text-align: left;
+}
+
+.AlignCenter {
+    text-align: center;
+}
+
+.Title {
+    font-weight: bold;
+}
