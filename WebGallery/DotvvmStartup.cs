@@ -2,7 +2,6 @@
 using DotVVM.Framework.Configuration;
 using DotVVM.Framework.Controls.Bootstrap4;
 using DotVVM.Framework.ResourceManagement;
-using DotVVM.Framework.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WebGallery
