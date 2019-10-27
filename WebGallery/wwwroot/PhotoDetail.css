@@ -17,95 +17,25 @@
     background-size: cover;
 }
 
-@-webkit-keyframes fadein {
-    from {
-        opacity: 0.1;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@-moz-keyframes fadein {
-    from {
-        opacity: 0.1;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0.1;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@-webkit-keyframes fadeout {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0.1;
-    }
-}
-
-@-moz-keyframes fadeout {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0.1;
-    }
-}
-
-@keyframes fadeout {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0.1;
-    }
-}
-
-#navigation, .fading {
-    -webkit-animation: fadeout 1s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadeout 1s; /* Firefox < 16 */
-    -o-animation: fadeout 1s; /* Opera < 12.1 */
-    animation: fadeout 1s;
-    opacity: 0.1;
-}
-
-#navigation:hover, .fading:hover {
-    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadein 1s; /* Firefox < 16 */
-    -o-animation: fadein 1s; /* Opera < 12.1 */
-    animation: fadein 1s;
-    opacity: 1;
-}
-
 .BackgroundNavigationLeft {
     background: rgb(0,0,0);
-    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.70) 55%, rgba(0,0,0,0) 100%); 
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.70) 55%, rgba(0,0,0,0) 100%);
+    opacity: 0.1;
 }
 
 .BackgroundNavigationRight {
     background: rgb(0,0,0);
-    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.70) 45%, rgba(0,0,0,1) 100%); 
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.70) 45%, rgba(0,0,0,1) 100%);
+    opacity: 0.1;
 }
 
-.BackgroundNavigationBottom { 
+.BackgroundNavigationBottom {
+    height: 700px;
+    margin: 0 0 -400px;
     background: rgb(0,0,0);
-    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7231093120842087) 55%, rgba(0,0,0,0) 100%); 
+    background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%),
+                radial-gradient(circle closest-side, black, transparent);
+    opacity: 0.1;
 }
 
 .Navigation {
@@ -128,4 +58,24 @@
     top: 50%;
     color: white;
     font-size: 3em;
+}
+
+.PhotoDescription {
+    padding-top: 200px;
+}
+
+.HomeLink {
+    text-decoration: none;
+    color: white;
+    margin-right: 5%;
+}
+
+.InfoLink {
+    text-decoration: none;
+    color: white;
+    margin-left: 5%;
+}
+
+#navigation {
+    display: none;
 }

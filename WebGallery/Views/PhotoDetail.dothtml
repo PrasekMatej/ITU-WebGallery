@@ -12,10 +12,19 @@
                 <div class="BackgroundNavigationRight fading Navigation NavigationRight"><dc:FAIcon class="NavigationIcon" Icon="angle_right_solid" /></div>
             </RightControlTemplate>
             <CaptionTemplate>
-                <div class="fading BackgroundNavigationBottom">
-                    <h3>{{value: Name}}</h3>
-                    <p>{{value: Description}}</p>
-                    <dot:LinkButton Click="{staticCommand: _root.OpenedInfo = _this}"><dc:FAIcon Icon="info_circle_solid" /></dot:LinkButton>
+                <div class="BackgroundNavigationBottom fading">
+                    <div class="fading PhotoDescription">
+                        <p>
+                            <dot:RouteLink RouteName="Default">
+                                <dc:FAIcon Icon="home_solid" title="Back to all photos" class="HomeLink" />
+                            </dot:RouteLink>
+                            <dot:LinkButton Click="{staticCommand: _root.OpenedInfo = _this}">
+                                <dc:FAIcon Icon="info_circle_solid" class="InfoLink" />
+                            </dot:LinkButton>
+                        </p>
+                        <h3>{{value: Name}}</h3>
+                        <p>{{value: Description}}</p>
+                    </div>
                 </div>
             </CaptionTemplate>
         </bs:Carousel>
@@ -59,13 +68,21 @@
             </div>
         </FooterTemplate>
     </bs:ModalDialog>
-
     <dot:InlineScript>
-        // this script fixes following bug: Resolution modal is not possible to show after it has been closed.
         dotvvm.events.init.subscribe(function () {
+            $(document).ready(function () {
+                $('.fading').hover(
+                    function () {
+                        $('.fading').stop(true).fadeTo(500, 1);
+                    },
+                    function () {
+                        $('.fading').stop(true).fadeTo(500, 0.1);
+                    });
 
-            $("#InfoWindow").on('hidden.bs.modal', function (e) {
-                dotvvm.viewModels.root.viewModel.OpenedInfo(null);
+                // this script fixes following bug: Resolution modal is not possible to show after it has been closed.
+                $("#InfoWindow").on('hidden.bs.modal', function (e) {
+                    dotvvm.viewModels.root.viewModel.OpenedInfo(null);
+                });
             });
         });
     </dot:InlineScript>
