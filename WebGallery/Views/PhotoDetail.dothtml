@@ -1,7 +1,73 @@
 ﻿@viewModel WebGallery.ViewModels.PhotoDetailViewModel, WebGallery
-@masterPage Views/MasterPage.dotmaster
+@masterPage Views/AuthenticatedMasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
+    <dot:RequiredResource Name="PhotoDetailStyles"></dot:RequiredResource>
+    <div ID="PhotoDetail">
+        <bs:Carousel DataSource="{value: Photos}" ImageUrlBinding="{value: Url}" ImageAlternateTextBinding="{value: Name}" RenderIndicators="false">
+            <LeftControlTemplate>
+                <div class="BackgroundNavigationLeft fading Navigation NavigationLeft"><dc:FAIcon class="NavigationIcon" Icon="angle_left_solid" /></div>
+            </LeftControlTemplate>
+            <RightControlTemplate>
+                <div class="BackgroundNavigationRight fading Navigation NavigationRight"><dc:FAIcon class="NavigationIcon" Icon="angle_right_solid" /></div>
+            </RightControlTemplate>
+            <CaptionTemplate>
+                <div class="fading BackgroundNavigationBottom">
+                    <h3>{{value: Name}}</h3>
+                    <p>{{value: Description}}</p>
+                    <dot:LinkButton Click="{staticCommand: _root.OpenedInfo = _this}"><dc:FAIcon Icon="info_circle_solid" /></dot:LinkButton>
+                </div>
+            </CaptionTemplate>
+        </bs:Carousel>
+    </div>
 
+    <bs:ModalDialog ID="InfoWindow" DataContext="{value: OpenedInfo}" IsDisplayed="{value: _root.OpenedInfo != null}">
+        <HeaderTemplate>
+            <h2 class="AlignCenter">{{value: Name}}</h2>
+        </HeaderTemplate>
+        <ContentTemplate>
+            <bs:Row Visible="{value: Description != null && Description != ""}">
+                <bs:Column Size="4" class="AlignRight Title">Description:</bs:Column>
+                <bs:Column Size="8">{{value: Description}}</bs:Column>
+            </bs:Row>
+            <bs:Row>
+                <bs:Column Size="4" class="AlignRight Title">Created:</bs:Column>
+                <bs:Column Size="8"><dot:Literal Text="{value: CreatedDate}" ValueType="DateTime" FormatString="g" /></bs:Column>
+            </bs:Row>
+            <bs:Row DataContext="{value: Parent}">
+                <bs:Column Size="4" class="AlignRight Title">Folder:</bs:Column>
+                <bs:Column Size="8">{{value: Name}}</bs:Column>
+            </bs:Row>
+            <%--
+            TODO
+            <bs:Row>
+                <bs:Column Size="4" class="AlignRight Title">Tags:</bs:Column>
+                <bs:Column Size="8">{{value: Tags}}</bs:Column>
+            </bs:Row>--%>
+            <bs:Row Visible="{value: Metadata != null && Metadata != ""}">
+                <bs:Column Size="4" class="AlignRight Title">Metadata:</bs:Column>
+                <bs:Column Size="8">{{value: Metadata}}</bs:Column>
+            </bs:Row>
+            <bs:Row>
+                <bs:Column Size="4" class="AlignRight Title">Address:</bs:Column>
+                <bs:Column Size="8">Černopolní 213/10, 613 00 Brno-sever</bs:Column>
+            </bs:Row>
+        </ContentTemplate>
+        <FooterTemplate>
+            <div class="Map">
+                <dc:GoogleMap Address="Černopolní 213/10, 613 00 Brno-sever" />
+            </div>
+        </FooterTemplate>
+    </bs:ModalDialog>
+
+    <dot:InlineScript>
+        // this script fixes following bug: Resolution modal is not possible to show after it has been closed.
+        dotvvm.events.init.subscribe(function () {
+
+            $("#InfoWindow").on('hidden.bs.modal', function (e) {
+                dotvvm.viewModels.root.viewModel.OpenedInfo(null);
+            });
+        });
+    </dot:InlineScript>
 </dot:Content>
 

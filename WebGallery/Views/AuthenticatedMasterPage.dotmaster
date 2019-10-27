@@ -2,7 +2,7 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
-    <bs:ResponsiveNavigation HeaderImageUrl="https://picsum.photos/150/25" HeaderText="Web Gallery  " HeaderLinkUrl="/" Theme="Dark">
+    <bs:ResponsiveNavigation ID="navigation" ScrollBehavior="FixedTop" HeaderImageUrl="https://picsum.photos/150/25" HeaderText="Web Gallery  " HeaderLinkUrl="/" Theme="Dark">
         <LeftAlignedItems>
 
         </LeftAlignedItems>
