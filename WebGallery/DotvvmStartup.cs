@@ -27,7 +27,12 @@ namespace WebGallery
 
         private void ConfigureControls(DotvvmConfiguration config, string applicationPath)
         {
-            config.AddBootstrap4Configuration();
+            var dotvvmBootstrapOptions = DotvvmBootstrapOptions.CreateDefaultSettings();
+            dotvvmBootstrapOptions.JQueryResource = new ScriptResource()
+            {
+                Location = new UrlResourceLocation("~/jquery-3.4.1.min.js")
+            };
+            config.AddBootstrap4Configuration(dotvvmBootstrapOptions);
             config.AddContribFAIconConfiguration();
             config.AddContribGoogleMapConfiguration("AIzaSyCGPSZzWUXLrGJsYQb4QnMH4Yl4rf1b9V0");
         }
