@@ -1,0 +1,42 @@
+﻿.item-container {
+    padding-right: 5%;
+    padding-left: 5%;
+}
+
+#BottomBar {
+    font-size: 0.8em;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: fixed;
+    bottom: 0;
+    background-color: #343a40;
+    color: white;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+
+#pager {
+    margin-bottom: 0;
+    padding-top: 0.5em
+}
+
+    #pager .page-link {
+        background-color: lightgray;
+        border: solid grey 1px;
+        color: black;
+    }
+
+    #pager .page-item.active .page-link {
+        background-color: grey;
+    }
+
+    #pager .page-item.disabled .page-link {
+        color: gray;
+    }
+
+.directory {
+    font-size: 1.5em;
+}

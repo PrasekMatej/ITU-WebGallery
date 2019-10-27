@@ -46,7 +46,12 @@ namespace WebGallery
             config.Resources.Register("PhotoDetailStyles", new StylesheetResource()
             {
                 Location = new UrlResourceLocation("~/PhotoDetail.css"),
-                Dependencies = new []{ "Styles" }
+                Dependencies = new[] { "Styles" }
+            });
+            config.Resources.Register("PhotoListStyles", new StylesheetResource()
+            {
+                Location = new UrlResourceLocation("~/PhotoList.css"),
+                Dependencies = new[] { "Styles" }
             });
         }
 

@@ -2,5 +2,57 @@
 @masterPage Views/AuthenticatedMasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
+    <dot:RequiredResource Name="PhotoListStyles" />
+    <div ID="Content">
+        <bs:Breadcrumb DataSource="{value: Path}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.Path.Count==_index+1}" NavigateUrlBinding="{value: "www.google.com"}" />
+        <dot:Repeater DataSource="{value: Folders}" RenderWrapperTag="true" class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
+            <bs:Card>
+                <Content>
+                    <bs:CardBody>
 
+                        <div class="AlignCenter directory">
+                            <dc:FAIcon Icon="folder_solid" />
+                            {{value: Name}}<div />
+                    </bs:CardBody>
+                </Content>
+            </bs:Card>
+        </dot:Repeater>
+        <div class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
+            <bs:Card ColorDecorator.BackgroundColor="Light">
+                <Content>
+                    <bs:CardImage ImageUrl=".\upload.png" />
+                </Content>
+                <FooterTemplate>
+                    <div class="AlignCenter"><b>Upload new photo</b><div />
+                </FooterTemplate>
+            </bs:Card>
+            <dot:Repeater DataSource="{value: Photos}" RenderWrapperTag="false">
+                <ItemTemplate>
+                    <bs:Card>
+                        <Content>
+                            <bs:CardImage ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
+                        </Content>
+                        <FooterTemplate>
+                            <div class="AlignCenter">{{value: Name}}<div />
+                        </FooterTemplate>
+                    </bs:Card>
+                </ItemTemplate>
+            </dot:Repeater>
+        </div>
+    </div>
+    <div ID="BottomBar">
+        <bs:Row>
+            <bs:Column Size="3">
+                <div class="AlignCenter">Photos count: {{value: FakeDataset.PagingOptions.PageSize}}</div>
+                <bs:Range MinValue="10" MaxValue="100" SelectedValue="{value: FakeDataset.PagingOptions.PageSize}" />
+            </bs:Column>
+            <bs:Column Size="6">
+                <bs:DataPager id="pager" Size="Small" FlexDecorator.JustifyContent="Center" DataSet="{value: FakeDataset}" HideWhenOnlyOnePage="false" />
+            </bs:Column>
+            <bs:Column Size="3">
+                <div class="AlignCenter">Column count: {{value: ColumnCount}}</div>
+                <bs:Range MinValue="1" MaxValue="10" SelectedValue="{value: ColumnCount}" />
+            </bs:Column>
+        </bs:Row>
+    </div>
 </dot:Content>
