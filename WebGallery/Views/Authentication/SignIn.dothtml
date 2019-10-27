@@ -12,6 +12,7 @@
                 <bs:Form>
                     <bs:TextBoxFormGroup Text="{value: UserName}" LabelText="Username" Validator.Value="{value: UserName}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
                     <bs:TextBoxFormGroup Text="{value: Password}" TextBoxType="Password" LabelText="Password" Validator.Value="{value: Password}" Validator.InvalidCssClass="has-error" Validator.SetToolTipText="true" />
+                    <dot:ValidationSummary class="has-error" />
                 </bs:Form>
             </bs:CardBody>
         </Content>
