@@ -30,20 +30,20 @@
         </bs:Carousel>
     </div>
 
-    <bs:ModalDialog ID="InfoWindow" DataContext="{value: OpenedInfo}" IsDisplayed="{value: _root.OpenedInfo != null}">
+    <bs:ModalDialog ID="InfoWindow" IsDisplayed="{value: _root.OpenedInfo != null}">
         <HeaderTemplate>
-            <h2 class="AlignCenter">{{value: Name}}</h2>
+            <h2 class="AlignCenter">{{value: OpenedInfo.Name}}</h2>
         </HeaderTemplate>
         <ContentTemplate>
-            <bs:Row Visible="{value: Description != null && Description != ""}">
+            <bs:Row Visible="{value: OpenedInfo.Description != null && OpenedInfo.Description != ""}">
                 <bs:Column Size="4" class="AlignRight Title">Description:</bs:Column>
-                <bs:Column Size="8">{{value: Description}}</bs:Column>
+                <bs:Column Size="8">{{value: OpenedInfo.Description}}</bs:Column>
             </bs:Row>
             <bs:Row>
                 <bs:Column Size="4" class="AlignRight Title">Created:</bs:Column>
-                <bs:Column Size="8"><dot:Literal Text="{value: CreatedDate}" ValueType="DateTime" FormatString="g" /></bs:Column>
+                <bs:Column Size="8"><dot:Literal Text="{value: OpenedInfo.CreatedDate}" ValueType="DateTime" FormatString="g" /></bs:Column>
             </bs:Row>
-            <bs:Row DataContext="{value: Parent}">
+            <bs:Row DataContext="{value: OpenedInfo.Parent}">
                 <bs:Column Size="4" class="AlignRight Title">Folder:</bs:Column>
                 <bs:Column Size="8">{{value: Name}}</bs:Column>
             </bs:Row>
@@ -53,9 +53,9 @@
                 <bs:Column Size="4" class="AlignRight Title">Tags:</bs:Column>
                 <bs:Column Size="8">{{value: Tags}}</bs:Column>
             </bs:Row>--%>
-            <bs:Row Visible="{value: Metadata != null && Metadata != ""}">
+            <bs:Row Visible="{value: OpenedInfo.Metadata != null && OpenedInfo.Metadata != ""}">
                 <bs:Column Size="4" class="AlignRight Title">Metadata:</bs:Column>
-                <bs:Column Size="8">{{value: Metadata}}</bs:Column>
+                <bs:Column Size="8">{{value: OpenedInfo.Metadata}}</bs:Column>
             </bs:Row>
             <bs:Row>
                 <bs:Column Size="4" class="AlignRight Title">Address:</bs:Column>
