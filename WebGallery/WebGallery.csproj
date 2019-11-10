@@ -27,9 +27,6 @@
     <ProjectReference Include="..\WebGallery.BL\WebGallery.BL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="lib\" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="DotVVM.BusinessPack">
       <HintPath>lib\DotVVM.BusinessPack.dll</HintPath>
     </Reference>
