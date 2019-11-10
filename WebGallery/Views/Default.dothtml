@@ -4,12 +4,11 @@
 <dot:Content ContentPlaceHolderID="MainContent">
     <dot:RequiredResource Name="PhotoListStyles" />
     <div ID="Content">
-        <bs:Breadcrumb DataSource="{value: Path}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.Path.Count==_index+1}" NavigateUrlBinding="{value: "www.google.com"}" />
+        <bs:Breadcrumb DataSource="{value: CurrentPath}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.CurrentPath.Count==_index+1}" NavigateUrlBinding="{value: "www.google.com"}" />
         <dot:Repeater DataSource="{value: Folders}" RenderWrapperTag="true" class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
             <bs:Card>
                 <Content>
                     <bs:CardBody>
-
                         <div class="AlignCenter directory">
                             <dc:FAIcon Icon="folder_solid" />
                             {{value: Name}}<div />
@@ -18,7 +17,7 @@
             </bs:Card>
         </dot:Repeater>
         <div class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
-            <bs:Card ColorDecorator.BackgroundColor="Light">
+            <bs:Card ColorDecorator.BackgroundColor="Light" Events.Click="{staticCommand: IsUploadDialogVisible=true}">
                 <Content>
                     <bs:CardImage ImageUrl=".\upload.png" />
                 </Content>
@@ -55,4 +54,32 @@
             </bs:Column>
         </bs:Row>
     </div>
+    <bs:ModalDialog Size="Extralarge" IsDisplayed="{value: IsUploadDialogVisible}">
+        <bp:FileUpload AllowedFileTypes=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" ID="FileUpload" Data="{value: UploadData}" AllowMultipleFiles="true" UploadCompleted="{command: UploadCompleted()}">
+            <DropTemplate>
+                <div ID="dropZone">
+                    <dc:FAIcon Icon="cloud_upload_alt_solid" />
+                </div>
+            </DropTemplate>
+        </bp:FileUpload>
+        <bs:Button Type="Success" Click="{command: _root.Save()}" Text="Save" Enabled="{value: !UploadData.IsBusy}" />
+
+        <bs:GridView DataSource="{value: UploadedPhotos}">
+            <dot:GridViewTemplateColumn HeaderText="Filename">
+                <bs:TextBox Text="{value: Name}" />
+            </dot:GridViewTemplateColumn>
+            <dot:GridViewTemplateColumn HeaderText="Description">
+                <bs:TextBox Text="{value: Description}" />
+            </dot:GridViewTemplateColumn>
+            <dot:GridViewTemplateColumn>
+                <bs:SimpleImage class="imagePreview" ImageUrl="{value: Url}" />
+            </dot:GridViewTemplateColumn>
+            <dot:GridViewTemplateColumn>
+                <dot:LinkButton Click="{command: _root.DeleteUploadedFile(Id)}">
+                    <dc:FAIcon Icon="trash_solid" />
+                </dot:LinkButton>
+            </dot:GridViewTemplateColumn>
+        </bs:GridView>
+    </bs:ModalDialog>
+
 </dot:Content>

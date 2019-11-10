@@ -1,34 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+using DotVVM.BusinessPack.Controls;
 using DotVVM.Framework.Controls;
+using DotVVM.Framework.Storage;
 using WebGallery.BL.DTO;
 
 namespace WebGallery.ViewModels
 {
     public class DefaultViewModel : AuthenticatedMasterPageViewModel
     {
-        public GridViewDataSet<string> FakeDataset { get; set; } = new GridViewDataSet<string>()
+        private readonly IUploadedFileStorage fileStorage;
+
+        public DefaultViewModel(IUploadedFileStorage fileStorage)
         {
-            PagingOptions = new PagingOptions()
-            {
-                TotalItemsCount = 200,
-                PageSize = 20
-            }
-        };
+            this.fileStorage = fileStorage;
 
-        public ICollection<PathModel> Path { get; set; }
-        public Folder CurrentFolder { get; set; }
-        public ICollection<Folder> Folders => CurrentFolderItems.Where(t => t is Folder).Cast<Folder>().ToList();
-        public ICollection<Photo> Photos => CurrentFolderItems.Where(t => t is Photo).Cast<Photo>().ToList();
-
-        protected ICollection<Item> CurrentFolderItems { get; set; } = new List<Item>();
-
-        public int ColumnCount { get; set; } = 6;
-
-        public DefaultViewModel()
-        {
             CurrentFolder = new Folder
             {
                 Id = Guid.NewGuid(),
@@ -83,9 +72,30 @@ namespace WebGallery.ViewModels
                 Id = Guid.NewGuid()
             });
 
-            Path = GetPath(CurrentFolder);
+            CurrentPath = GetPath(CurrentFolder);
         }
 
+        public GridViewDataSet<string> FakeDataset { get; set; } = new GridViewDataSet<string>()
+        {
+            PagingOptions = new PagingOptions()
+            {
+                TotalItemsCount = 200,
+                PageSize = 20
+            }
+        };
+
+        public ICollection<PathModel> CurrentPath { get; set; }
+        public Folder CurrentFolder { get; set; }
+        public ICollection<Folder> Folders => CurrentFolderItems.Where(t => t is Folder).Cast<Folder>().ToList();
+        public ICollection<Photo> Photos => CurrentFolderItems.Where(t => t is Photo).Cast<Photo>().ToList();
+
+        protected ICollection<Item> CurrentFolderItems { get; set; } = new List<Item>();
+
+        public int ColumnCount { get; set; } = 6;
+
+        public bool IsUploadDialogVisible { get; set; }
+        public UploadData UploadData { get; set; } = new UploadData();
+        public ICollection<Photo> UploadedPhotos { get; set; } = new List<Photo>();
         private ICollection<PathModel> GetPath(Folder currentFolder)
         {
             var path = new List<PathModel>();
@@ -102,6 +112,58 @@ namespace WebGallery.ViewModels
 
             path.Reverse();
             return path;
+        }
+
+        public void Save()
+        {
+            var folderPath = GetFolderPath();
+
+            // save all files to disk
+            foreach (var file in UploadData.Files)
+            {
+                var filePath = Path.Combine(folderPath, file.FileId + Path.GetExtension(file.FileName));
+                fileStorage.SaveAs(file.FileId, filePath);
+                fileStorage.DeleteFile(file.FileId);
+            }
+
+            // clear the data so the user can continue with other files
+            UploadData.Clear();
+        }
+
+        private string GetFolderPath()
+        {
+            var folderPath = Path.Combine(Context.Configuration.ApplicationPhysicalPath, "UserPhotos");
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            return folderPath;
+        }
+
+        public void DeleteUploadedFile(Guid id)
+        {
+            UploadData.Files.Remove(UploadData.Files.Find(file => file.FileId == id));
+            UploadedPhotos.Remove(UploadedPhotos.First(file => file.Id == id));
+        }
+
+        public void UploadCompleted()
+        {
+
+            foreach (var uploadDataFile in UploadData.Files)
+            {
+                if (!UploadedPhotos.Any(t => t.Id == uploadDataFile.FileId))
+                {
+                    UploadedPhotos.Add(new Photo()
+                    {
+                        Id = uploadDataFile.FileId,
+                        CreatedDate = DateTime.Now,
+                        Name = Path.GetFileNameWithoutExtension(uploadDataFile.FileName),
+                        Url = uploadDataFile.PreviewUrl
+                    });
+                }
+            }
         }
     }
 
