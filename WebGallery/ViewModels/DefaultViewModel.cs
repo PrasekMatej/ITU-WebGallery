@@ -15,7 +15,6 @@ namespace WebGallery.ViewModels
     {
         private readonly IUploadedFileStorage fileStorage;
         public ICollection<Guid> SelectedPhotos { get; set; } = new List<Guid>();
-        public bool IsDeleteDialogVisible { get; set; }
         public DefaultViewModel(IUploadedFileStorage fileStorage)
         {
             this.fileStorage = fileStorage;
