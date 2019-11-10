@@ -76,6 +76,15 @@
     margin-left: 5%;
 }
 
+.EditLink {
+    text-decoration: none;
+    color: black;
+}
+
+.EditButton {
+    margin-top: 20px;
+}
+
 #navigation {
     display: none;
 }
