@@ -7,6 +7,7 @@ using DotVVM.BusinessPack.Controls;
 using DotVVM.Framework.Controls;
 using DotVVM.Framework.Storage;
 using WebGallery.BL.DTO;
+using System.Threading.Tasks;
 
 namespace WebGallery.ViewModels
 {
@@ -95,6 +96,8 @@ namespace WebGallery.ViewModels
         public int ColumnCount { get; set; } = 6;
 
         public bool IsUploadDialogVisible { get; set; }
+        public bool IsDeleteDialogVisible { get; set; }
+        public bool IsMoveDialogVisible { get; set; }
         public UploadData UploadData { get; set; } = new UploadData();
         public ICollection<Photo> UploadedPhotos { get; set; } = new List<Photo>();
         private ICollection<PathModel> GetPath(Folder currentFolder)
@@ -165,6 +168,11 @@ namespace WebGallery.ViewModels
                     });
                 }
             }
+        }
+
+        public void OpenMoveModalDialog()
+        {
+            IsMoveDialogVisible = true;
         }
     }
 
