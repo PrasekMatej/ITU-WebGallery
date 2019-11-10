@@ -13,7 +13,7 @@ namespace WebGallery.ViewModels
     public class DefaultViewModel : AuthenticatedMasterPageViewModel
     {
         private readonly IUploadedFileStorage fileStorage;
-
+        public ICollection<Guid> SelectedPhotos { get; set; } = new List<Guid>();
         public DefaultViewModel(IUploadedFileStorage fileStorage)
         {
             this.fileStorage = fileStorage;
@@ -41,6 +41,7 @@ namespace WebGallery.ViewModels
                 var width = random.Next(100, 300);
                 CurrentFolderItems.Add(new Photo
                 {
+                    Id = Guid.NewGuid(),
                     Parent = CurrentFolder,
                     CreatedDate = DateTime.Now.Subtract(TimeSpan.FromDays(i)),
                     Name = "Photo name",

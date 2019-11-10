@@ -29,10 +29,14 @@
                 <ItemTemplate>
                     <bs:Card>
                         <Content>
-                            <bs:CardImage ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
+                            <bs:CardBody class="photoPreview">
+                                <bs:CheckBox CheckedValue="{value: Id}" CheckedItems="{value: _root.SelectedPhotos}" />
+                                <bs:Image ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
+                            </bs:CardBody>
                         </Content>
                         <FooterTemplate>
-                            <div class="AlignCenter">{{value: Name}}<div />
+                            <div class="AlignCenter">
+                                {{value: Name}}<div />
                         </FooterTemplate>
                     </bs:Card>
                 </ItemTemplate>

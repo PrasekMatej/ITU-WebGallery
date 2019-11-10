@@ -62,3 +62,13 @@
 #FileUpload > div.dotvvm-bp-file-upload_panel {
     margin: auto
 }
+
+.photoPreview {
+    padding: 0;
+}
+
+    .photoPreview > div > input {
+        position: absolute !important;
+        right: 10px;
+        top: 10px;
+    }
