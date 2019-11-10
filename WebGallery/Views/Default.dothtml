@@ -107,8 +107,13 @@
 
     <bs:ModalDialog IsDisplayed="{value: IsDeleteDialogVisible}">
         <ContentTemplate>
-            Delete modal
+            Do you really want to delete {{value: SelectedPhotos.Count}} photos?
         </ContentTemplate>
+        <FooterTemplate>
+            <bs:Button Type="Danger">
+                <dc:FAIcon Icon="trash_alt_solid" /> Delete
+            </bs:Button>
+        </FooterTemplate>
     </bs:ModalDialog>
     
     <bs:ModalDialog IsDisplayed="{value: IsMoveDialogVisible}">
