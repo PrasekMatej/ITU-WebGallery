@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DotVVM.BusinessPack.Filters;
 using WebGallery.BL.DTO;
 
 namespace WebGallery.ViewModels
@@ -33,8 +34,25 @@ namespace WebGallery.ViewModels
                 Description = "desc"
             }
         };
-        
+
         public Photo OpenedInfo { get; set; }
+        public bool EditMode { get; set; }
+
+        public void SaveDetails()
+        {
+            var updated = Photos.Find(photo => photo.Id == OpenedInfo.Id);
+            updated.Name = OpenedInfo.Name;
+            updated.Description = OpenedInfo.Description;
+            EditMode = false;
+        }
+
+        public void CancelChanges()
+        {
+            EditMode = false;
+            var openedInfoId = OpenedInfo.Id;
+            OpenedInfo = null;
+            OpenedInfo = Photos.Find(photo => photo.Id == openedInfoId);
+        }
     }
 }
 

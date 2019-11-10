@@ -32,38 +32,65 @@
 
     <bs:ModalDialog ID="InfoWindow" IsDisplayed="{value: _root.OpenedInfo != null}">
         <HeaderTemplate>
-            <h2 class="AlignCenter">{{value: OpenedInfo.Name}}</h2>
+            <h2 class="AlignCenter">
+                <dot:Literal Text="{value: OpenedInfo.Name}" Visible="{value: !_root.EditMode}"/>
+                <bs:TextBox Text="{value: OpenedInfo.Name}" Visible="{value: _root.EditMode}"/>
+            </h2>
+            <dot:LinkButton Visible="{value: !_root.EditMode}" Click="{staticCommand: _root.EditMode = true}">
+                <dc:FAIcon Icon="pencil_alt_solid" class="AlignLeft EditLink" />
+            </dot:LinkButton>
         </HeaderTemplate>
         <ContentTemplate>
-            <bs:Row Visible="{value: OpenedInfo.Description != null && OpenedInfo.Description != ""}">
+            <bs:Row Visible="{value: (OpenedInfo.Description != null && OpenedInfo.Description != "") || _root.EditMode}">
                 <bs:Column Size="4" class="AlignRight Title">Description:</bs:Column>
-                <bs:Column Size="8">{{value: OpenedInfo.Description}}</bs:Column>
+                <bs:Column Size="8">
+                    <dot:Literal Visible="{value: !_root.EditMode}" Text="{value: OpenedInfo.Description}" />
+                    <bs:TextBox Visible="{value: _root.EditMode}" Text="{value: OpenedInfo.Description}" />
+                </bs:Column>
             </bs:Row>
-            <bs:Row>
+            <bs:Row Visible="{value: !_root.EditMode}">
                 <bs:Column Size="4" class="AlignRight Title">Created:</bs:Column>
-                <bs:Column Size="8"><dot:Literal Text="{value: OpenedInfo.CreatedDate}" ValueType="DateTime" FormatString="g" /></bs:Column>
+                <bs:Column Size="8">
+                    <dot:Literal Text="{value: OpenedInfo.CreatedDate}" ValueType="DateTime" FormatString="g" />
+                </bs:Column>
             </bs:Row>
-            <bs:Row DataContext="{value: OpenedInfo.Parent}">
+            <bs:Row DataContext="{value: OpenedInfo.Parent}" Visible="{value: !_root.EditMode}">
                 <bs:Column Size="4" class="AlignRight Title">Folder:</bs:Column>
-                <bs:Column Size="8">{{value: Name}}</bs:Column>
+                <bs:Column Size="8">
+                    <dot:Literal Text="{value: Name}" />
+                </bs:Column>
             </bs:Row>
             <%--
             TODO
             <bs:Row>
                 <bs:Column Size="4" class="AlignRight Title">Tags:</bs:Column>
-                <bs:Column Size="8">{{value: Tags}}</bs:Column>
+                <bs:Column Size="8"><dot:Literal text="{value: Tags}" /></bs:Column>
             </bs:Row>--%>
-            <bs:Row Visible="{value: OpenedInfo.Metadata != null && OpenedInfo.Metadata != ""}">
+            <bs:Row Visible="{value: OpenedInfo.Metadata != null && OpenedInfo.Metadata != "" && !_root.EditMode}">
                 <bs:Column Size="4" class="AlignRight Title">Metadata:</bs:Column>
-                <bs:Column Size="8">{{value: OpenedInfo.Metadata}}</bs:Column>
+                <bs:Column Size="8">
+                    <dot:Literal Text="{value: OpenedInfo.Metadata}" />
+                </bs:Column>
             </bs:Row>
             <bs:Row>
                 <bs:Column Size="4" class="AlignRight Title">Address:</bs:Column>
-                <bs:Column Size="8">Černopolní 213/10, 613 00 Brno-sever</bs:Column>
+                <bs:Column Size="8">
+                    <dot:Literal Visible="{value: !_root.EditMode}" Text="Černopolní 213/10, 613 00 Brno-sever" />
+                    <bs:TextBox Visible="{value: _root.EditMode}" Text="Černopolní 213/10, 613 00 Brno-sever" />
+                </bs:Column>
+            </bs:Row>
+
+            <bs:Row Visible="{value: _root.EditMode}">
+                <bs:Column Size="6" class="AlignCenter">
+                    <bs:Button Text="Cancel" Type="Danger" class="EditButton" Click="{command: _this.CancelChanges()}" />
+                </bs:Column>
+                <bs:Column Size="6" class="AlignCenter">
+                    <bs:Button Text="Save" Type="Success" class="EditButton" Click="{command: _this.SaveDetails()}" />
+                </bs:Column>
             </bs:Row>
         </ContentTemplate>
         <FooterTemplate>
-            <div class="Map">
+            <div class="Map" Visible="{value: !_root.EditMode}">
                 <dc:GoogleMap Address="Černopolní 213/10, 613 00 Brno-sever" />
             </div>
         </FooterTemplate>
@@ -82,6 +109,7 @@
                 // this script fixes following bug: Resolution modal is not possible to show after it has been closed.
                 $("#InfoWindow").on('hidden.bs.modal', function (e) {
                     dotvvm.viewModels.root.viewModel.OpenedInfo(null);
+                    dotvvm.viewModels.root.viewModel.EditMode(false);
                 });
             });
         });
