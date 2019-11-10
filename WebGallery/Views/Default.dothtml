@@ -5,6 +5,25 @@
     <dot:RequiredResource Name="PhotoListStyles" />
     <div ID="Content">
         <bs:Breadcrumb DataSource="{value: CurrentPath}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.CurrentPath.Count==_index+1}" NavigateUrlBinding="{value: "www.google.com"}" />
+        <bs:NavigationBar>
+            <Items>
+                <bs:NavigationItem>
+                    <bs:LinkButton Type="Success" Click="{staticCommand: IsUploadDialogVisible=true}">
+                        <dc:FAIcon Icon="plus_circle_solid" /> Upload photo
+                    </bs:LinkButton>
+                </bs:NavigationItem>
+                <bs:NavigationItem Visible="{value: _root.SelectedPhotos.Count != 0}">
+                    <bs:LinkButton Type="Danger" Click="{staticCommand: IsDeleteDialogVisible=true}">
+                        <dc:FAIcon Icon="trash_alt_solid" /> Delete photo
+                    </bs:LinkButton>
+                </bs:NavigationItem>
+                <bs:NavigationItem  Visible="{value: _root.SelectedPhotos.Count != 0}">
+                    <bs:LinkButton Click="{command: OpenMoveModalDialog()}">
+                        <dc:FAIcon Icon="arrows_alt_solid" /> Move photo
+                    </bs:LinkButton>
+                </bs:NavigationItem>
+            </Items>
+        </bs:NavigationBar>
         <dot:Repeater DataSource="{value: Folders}" RenderWrapperTag="true" class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
             <bs:Card>
                 <Content>
@@ -17,14 +36,14 @@
             </bs:Card>
         </dot:Repeater>
         <div class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
-            <bs:Card ColorDecorator.BackgroundColor="Light" Events.Click="{staticCommand: IsUploadDialogVisible=true}">
+            <%--<bs:Card ColorDecorator.BackgroundColor="Light" Events.Click="{staticCommand: IsUploadDialogVisible=true}">
                 <Content>
                     <bs:CardImage ImageUrl=".\upload.png" />
                 </Content>
                 <FooterTemplate>
                     <div class="AlignCenter"><b>Upload new photo</b><div />
                 </FooterTemplate>
-            </bs:Card>
+            </bs:Card>--%>
             <dot:Repeater DataSource="{value: Photos}" RenderWrapperTag="false">
                 <ItemTemplate>
                     <bs:Card>
@@ -84,6 +103,18 @@
                 </dot:LinkButton>
             </dot:GridViewTemplateColumn>
         </bs:GridView>
+    </bs:ModalDialog>
+
+    <bs:ModalDialog IsDisplayed="{value: IsDeleteDialogVisible}">
+        <ContentTemplate>
+            Delete modal
+        </ContentTemplate>
+    </bs:ModalDialog>
+    
+    <bs:ModalDialog IsDisplayed="{value: IsMoveDialogVisible}">
+        <ContentTemplate>
+            Move modal
+        </ContentTemplate>
     </bs:ModalDialog>
 
 </dot:Content>
