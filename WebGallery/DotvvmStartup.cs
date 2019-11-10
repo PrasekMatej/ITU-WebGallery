@@ -1,4 +1,5 @@
-﻿using DotVVM.Contrib;
+﻿using DotVVM.BusinessPack;
+using DotVVM.Contrib;
 using DotVVM.Framework.Configuration;
 using DotVVM.Framework.Controls.Bootstrap4;
 using DotVVM.Framework.ResourceManagement;
@@ -62,6 +63,7 @@ namespace WebGallery
 
         public void ConfigureServices(IDotvvmServiceCollection options)
         {
+            options.AddBusinessPack(BusinessPackTheme.Bootstrap4);
             options.AddDefaultTempStorages("temp");
         }
     }

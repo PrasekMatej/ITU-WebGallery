@@ -30,8 +30,17 @@
     <Folder Include="lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="DotVVM.BusinessPack">
+      <HintPath>lib\DotVVM.BusinessPack.dll</HintPath>
+    </Reference>
+    <Reference Include="DotVVM.BusinessPack.Core">
+      <HintPath>lib\DotVVM.BusinessPack.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DotVVM.Framework.Controls.Bootstrap">
       <HintPath>lib\DotVVM.Framework.Controls.Bootstrap.dll</HintPath>
+    </Reference>
+    <Reference Include="DotVVM.Utils.HtmlElements">
+      <HintPath>lib\DotVVM.Utils.HtmlElements.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
