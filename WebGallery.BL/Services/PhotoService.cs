@@ -10,7 +10,7 @@ namespace WebGallery.BL.Services
     public class PhotoService
     {
 
-        public void UploadPhoto(List<Photo> photos)
+        public void UploadPhoto(List<Photo> photos) //, Directory belongingDirecotry
         {
             using (var context = new GalleryDbContext())
             {
@@ -25,7 +25,9 @@ namespace WebGallery.BL.Services
                         Tags = photo.Tags.Select(tag => new TagEntity() {Name = tag.Name, Owner = tag.Owner, DeletedDate = tag.DeletedDate, Id = tag.Id   }).ToList(),
                     };
                     context.Photos.Add(photoEntity);
+
                 }
+                //context.Directories.UpdateList                
                 context.SaveChanges();
             }
 
@@ -46,25 +48,35 @@ namespace WebGallery.BL.Services
         {
             using (var context = new GalleryDbContext())
             {
+                //nebudeme moct presuvat fotky do inych adresarov?
+                //var updatingPhoto = context.Photos.Find(photo.Id);
+
                 var photoEntity = new PhotoEntity
                 {
+                    //Id = updatingPhoto.Id;
+                    Id = photo.Id,
                     Url = photo.Url,
                     Description = photo.Description,
                     Metadata = photo.Metadata,
                     CreatedDate = photo.CreatedDate,
                     Tags = photo.Tags.Select(tag => new TagEntity() { Name = tag.Name, Owner = tag.Owner, DeletedDate = tag.DeletedDate, Id = tag.Id }).ToList(),
                 };
+
                 context.Photos.Update(photoEntity);
                 context.SaveChanges();
             }                
         }
 
-        public void DeletePhoto(PhotoEntity photo)
+        public void DeletePhoto(Photo photo)
         {
-            using (var context = _dbContext.CreateDbContext())
+            using (var context = new GalleryDbContext())
             {
-                Console.WriteLine("Tu mala byt implementacia upload");
-                return 1;
+                var toDelete = context.Photos.Find(photo.Id);
+
+                context.Photos.Remove(toDelete);
+                //remove from dir
+
+                context.SaveChanges();
             }
 
         }
