@@ -45,5 +45,9 @@ namespace WebGallery.BL.Services
             return identity;
         }
 
+        public async Task<IdentityUser> GetUser(string userName)
+        {
+            return await userManager.FindByNameAsync(userName);
+        }
     }
 }

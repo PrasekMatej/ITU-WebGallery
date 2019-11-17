@@ -6,6 +6,7 @@ using DotVVM.Framework.Hosting;
 using DotVVM.Framework.ViewModel.Validation;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using WebGallery.BL.DTO;
 using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels.Authentication
@@ -13,6 +14,7 @@ namespace WebGallery.ViewModels.Authentication
     public class RegisterViewModel : NonAuthenticatedMasterPage, IValidatableObject
     {
         private readonly UserService userService;
+        private readonly DirectoryService directoryService;
 
 
         [Required]
@@ -23,9 +25,10 @@ namespace WebGallery.ViewModels.Authentication
         [Required]
         public string ConfirmPassword { get; set; }
 
-        public RegisterViewModel(UserService userService)
+        public RegisterViewModel(UserService userService, DirectoryService directoryService)
         {
             this.userService = userService;
+            this.directoryService = directoryService;
         }
 
 
@@ -36,6 +39,8 @@ namespace WebGallery.ViewModels.Authentication
             if (identityResult.Succeeded)
             {
                 await SignIn();
+                var user = await userService.GetUser(UserName);
+                directoryService.CreateUserRootDirectory(user);
             }
             else
             {

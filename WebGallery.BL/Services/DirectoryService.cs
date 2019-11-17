@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using WebGallery.BL.DAL;
 using WebGallery.BL.DTO;
 
 namespace WebGallery.BL.Services
 {
-    class DirectoryService
+    public class DirectoryService
     {
 
         public void CreateDirectory(Folder Dir)
@@ -17,7 +19,7 @@ namespace WebGallery.BL.Services
                 var directoryEntity = new DirectoryEntity
                 {
                     Id = Guid.NewGuid(),
-                    Parent = Dir.Parent.Id,
+                    Parent = Dir.Parent,
                     Name = Dir.Name,
                 };
 
@@ -26,10 +28,32 @@ namespace WebGallery.BL.Services
             }
 
         }
-
-        public void MovePhoto(Photo photo)
+        public void CreateUserRootDirectory(IdentityUser user)
         {
-            //TODO presun photo do ineho directory
+            using (var context = new GalleryDbContext())
+            {
+                var directoryEntity = new DirectoryEntity
+                {
+                    Id = Guid.Parse(user.Id),
+                    Parent = Guid.Empty,
+                    Name = user.UserName,
+                };
+
+                context.Directories.Add(directoryEntity);
+                context.SaveChanges();
+            }
+
+        }
+
+        public void MovePhoto(Photo photo, Guid targetDirectory)
+        {
+            using (var context = new GalleryDbContext())
+            {
+                var foundPhoto = context.Photos.Find(photo.Id);
+                foundPhoto.Parent = targetDirectory;
+                context.Update(foundPhoto);
+                context.SaveChanges();
+            }
         }
 
 
@@ -52,9 +76,32 @@ namespace WebGallery.BL.Services
 
         public void DeleteAllPhotosInDirectory(Guid id)
         {
-            //TODO delete all pictures from dir
+            using (var context = new GalleryDbContext())
+            {
+                context.Photos.RemoveRange(context.Photos.Where(t => t.Parent == id).ToArray());
+                context.SaveChanges();
+            }
         }
 
-
+        public Folder GetDirectory(Guid id)
+        {
+            using (var context = new GalleryDbContext())
+            {
+                var directoryEntity = context.Directories.Find(id);
+                if (directoryEntity == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return new Folder()
+                    {
+                        Parent = directoryEntity.Parent,
+                        Name = directoryEntity.Name,
+                        Id = directoryEntity.Id
+                    };
+                }
+            }
+        }
     }
 }

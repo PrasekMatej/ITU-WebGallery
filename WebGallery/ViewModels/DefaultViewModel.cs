@@ -8,31 +8,26 @@ using DotVVM.Framework.Controls;
 using DotVVM.Framework.Storage;
 using WebGallery.BL.DTO;
 using System.Threading.Tasks;
+using DotVVM.Framework.Hosting;
+using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels
 {
     public class DefaultViewModel : AuthenticatedMasterPageViewModel
     {
         private readonly IUploadedFileStorage fileStorage;
+        private readonly DirectoryService directoryService;
         public ICollection<Guid> SelectedPhotos { get; set; } = new List<Guid>();
-        public DefaultViewModel(IUploadedFileStorage fileStorage)
+        public DefaultViewModel(IUploadedFileStorage fileStorage, DirectoryService directoryService)
         {
             this.fileStorage = fileStorage;
+            this.directoryService = directoryService;
 
             CurrentFolder = new Folder
             {
                 Id = Guid.NewGuid(),
                 Name = "Some other folder",
-                Parent = new Folder()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Some folder",
-                    Parent = new Folder()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = ".."
-                    }
-                }
+                Parent = Guid.Empty
             };
 
             var random = new Random();
@@ -43,7 +38,7 @@ namespace WebGallery.ViewModels
                 CurrentFolderItems.Add(new Photo
                 {
                     Id = Guid.NewGuid(),
-                    Parent = CurrentFolder,
+                    Parent = CurrentFolder.Id,
                     CreatedDate = DateTime.Now.Subtract(TimeSpan.FromDays(i)),
                     Name = "Photo name",
                     Description = $"Photo description {i}",
@@ -52,27 +47,6 @@ namespace WebGallery.ViewModels
                     Width = width
                 });
             }
-
-
-            CurrentFolderItems.Add(new Folder()
-            {
-                Name = "Folder 1",
-                Parent = CurrentFolder,
-                Id = Guid.NewGuid()
-            });
-
-            CurrentFolderItems.Add(new Folder()
-            {
-                Name = "Folder 2",
-                Parent = CurrentFolder,
-                Id = Guid.NewGuid()
-            });
-            CurrentFolderItems.Add(new Folder()
-            {
-                Name = "Folder 3",
-                Parent = CurrentFolder,
-                Id = Guid.NewGuid()
-            });
 
             CurrentPath = GetPath(CurrentFolder);
         }
@@ -111,7 +85,7 @@ namespace WebGallery.ViewModels
                     Name = folder.Name,
                     Id = folder.Id
                 });
-                folder = folder.Parent;
+                folder = directoryService.GetDirectory(folder.Parent);
             }
 
             path.Reverse();

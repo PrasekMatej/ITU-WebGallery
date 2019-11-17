@@ -7,6 +7,7 @@ namespace WebGallery.BL.DAL
     {
         public DbSet<PhotoEntity> Photos { get; set; }
         public DbSet<DirectoryEntity> Directories { get; set; }
+        public DbSet<TagEntity> Tags { get; set; }
 
         public GalleryDbContext()
         {
