@@ -27,19 +27,32 @@ namespace WebGallery.BL.Services
 
         }
 
+        public void MovePhoto(Photo photo)
+        {
+            //TODO presun photo do ineho directory
+        }
+
 
         public void DeleteDirectory(Folder dir)
         {
             using (var context = new GalleryDbContext())
             {
                 var toDelete = context.Directories.Find(dir.Id);
-
-                //also delete pictures in it
+                if (toDelete == null)
+                {
+                    return;
+                }
+                DeleteAllPhotosInDirectory(toDelete.Id);
 
                 context.Directories.Remove(toDelete);
                 context.SaveChanges();
             }
 
+        }
+
+        public void DeleteAllPhotosInDirectory(Guid id)
+        {
+            //TODO delete all pictures from dir
         }
 
 
