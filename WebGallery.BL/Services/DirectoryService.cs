@@ -11,10 +11,15 @@ namespace WebGallery.BL.Services
 {
     public class DirectoryService
     {
+        private readonly Func<GalleryDbContext> dbContextFactory;
 
+        public DirectoryService(Func<GalleryDbContext> dbContextFactory)
+        {
+            this.dbContextFactory = dbContextFactory;
+        }
         public void CreateDirectory(Folder Dir)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var directoryEntity = new DirectoryEntity
                 {
@@ -30,7 +35,7 @@ namespace WebGallery.BL.Services
         }
         public void CreateUserRootDirectory(IdentityUser user)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var directoryEntity = new DirectoryEntity
                 {
@@ -47,7 +52,7 @@ namespace WebGallery.BL.Services
 
         public void MovePhoto(Photo photo, Guid targetDirectory)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var foundPhoto = context.Photos.Find(photo.Id);
                 foundPhoto.Parent = targetDirectory;
@@ -59,7 +64,7 @@ namespace WebGallery.BL.Services
 
         public void DeleteDirectory(Folder dir)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var toDelete = context.Directories.Find(dir.Id);
                 if (toDelete == null)
@@ -76,7 +81,7 @@ namespace WebGallery.BL.Services
 
         public void DeleteAllPhotosInDirectory(Guid id)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 context.Photos.RemoveRange(context.Photos.Where(t => t.Parent == id).ToArray());
                 context.SaveChanges();
@@ -85,7 +90,7 @@ namespace WebGallery.BL.Services
 
         public Folder GetDirectory(Guid id)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var directoryEntity = context.Directories.Find(id);
                 if (directoryEntity == null)

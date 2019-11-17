@@ -10,10 +10,15 @@ namespace WebGallery.BL.Services
 {
     public class PhotoService
     {
+        private readonly Func<GalleryDbContext> dbContextFactory;
 
+        public PhotoService(Func<GalleryDbContext> dbContextFactory)
+        {
+            this.dbContextFactory = dbContextFactory;
+        }
         public void UploadPhoto(IEnumerable<Photo> photos)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 foreach (Photo photo in photos)
                 {
@@ -43,7 +48,7 @@ namespace WebGallery.BL.Services
 
         public ICollection<Photo> GetPhotos(Guid folderId, int pageNum, int pageSize)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
 
                 return context.Photos.Include(s => s.Tags).Where(p => p.Parent == folderId)
@@ -73,7 +78,7 @@ namespace WebGallery.BL.Services
         public void EditPhoto(Photo photo)
         {
 
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
 
                 var updatingPhoto = context.Photos.Find(photo.Id);
@@ -89,7 +94,7 @@ namespace WebGallery.BL.Services
 
         public void DeletePhoto(Photo photo)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 var toDelete = context.Photos.Find(photo.Id);
 
@@ -103,9 +108,15 @@ namespace WebGallery.BL.Services
 
     public class TagService
     {
+        private readonly Func<GalleryDbContext> dbContextFactory;
+
+        public TagService(Func<GalleryDbContext> dbContextFactory)
+        {
+            this.dbContextFactory = dbContextFactory;
+        }
         public void CreateTags(ICollection<Tag> tags)
         {
-            using (var context = new GalleryDbContext())
+            using (var context = dbContextFactory())
             {
                 foreach (var tag in tags)
                 {

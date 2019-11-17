@@ -9,13 +9,8 @@ namespace WebGallery.BL.DAL
         public DbSet<DirectoryEntity> Directories { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
 
-        public GalleryDbContext()
-        {
-
-        }
         public GalleryDbContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
         }
     }
 }

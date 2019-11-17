@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,17 @@ namespace WebGallery
             services.AddDataProtection();
             services.AddAuthorization();
             services.AddWebEncoders();
+            services.AddSingleton<Func<GalleryDbContext>>(() =>
+            {
+                var ob = new DbContextOptionsBuilder<GalleryDbContext>();
+                var con = Configuration.GetConnectionString("DefaultConnection");
+                ob.UseSqlServer(con);
+                return new GalleryDbContext(ob.Options);
+            });
             services.AddTransient(typeof(UserService));
+            services.AddTransient(typeof(DirectoryService));
+            services.AddTransient(typeof(PhotoService));
+            services.AddTransient(typeof(TagService));
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<GalleryDbContext>(options =>
                 {
