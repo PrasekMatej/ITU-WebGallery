@@ -1,46 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using DotVVM.BusinessPack.Filters;
+using DotVVM.Framework.ViewModel;
 using WebGallery.BL.DTO;
+using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels
 {
     public class PhotoDetailViewModel : AuthenticatedMasterPageViewModel
     {
-        public List<Photo> Photos { get; set; } = new List<Photo>()
-        {
-            new Photo()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.Now,
-                Name = "aa",
-                Url = "https://picsum.photos/id/819/2560/1440",
-                Description = "desc"
-            },
-            new Photo()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.Now,
-                Name = "bb",
-                Url = "https://picsum.photos/id/822/2560/1440",
-                Description = "desc"
-            },
-            new Photo()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.Now,
-                Name = "c",
-                Url = "https://picsum.photos/id/154/2560/1440",
-                Description = "desc"
-            }
-        };
+        public PhotoService PhotoService { get; }
+        public DirectoryService DirectoryService { get; }
 
+        [FromRoute("Id")]
+        public Guid PhotoId { get; set; }
+        public List<Photo> Photos { get; set; }
         public Photo OpenedInfo { get; set; }
         public bool EditMode { get; set; }
+        public override Task Init()
+        {
+            var folderGuid = DirectoryService.GetParentGuid(PhotoId);
+            Photos = PhotoService.GetAllPhotos(folderGuid);
+            return base.Init();
+        }
+
+        public PhotoDetailViewModel(PhotoService photoService, DirectoryService directoryService)
+        {
+            PhotoService = photoService;
+            DirectoryService = directoryService;
+        }
 
         public void SaveDetails()
         {
-            var updated = Photos.Find(photo => photo.Id == OpenedInfo.Id);
+            var updated = Photos.First(photo => photo.Id == OpenedInfo.Id);
             updated.Name = OpenedInfo.Name;
             updated.Description = OpenedInfo.Description;
             EditMode = false;
@@ -51,7 +45,17 @@ namespace WebGallery.ViewModels
             EditMode = false;
             var openedInfoId = OpenedInfo.Id;
             OpenedInfo = null;
-            OpenedInfo = Photos.Find(photo => photo.Id == openedInfoId);
+            OpenedInfo = Photos.First(photo => photo.Id == openedInfoId);
+        }
+
+        public void PrevPhoto()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void NextPhoto()
+        {
+           // throw new NotImplementedException();
         }
     }
 }

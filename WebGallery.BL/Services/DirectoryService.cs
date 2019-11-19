@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using WebGallery.BL.DAL;
 using WebGallery.BL.DTO;
 
@@ -68,6 +65,13 @@ namespace WebGallery.BL.Services
 
         }
 
+        public Guid GetParentGuid(Guid id)
+        {
+            using (var context = contextFactory())
+            {
+                return context.Photos.Find(id).Parent;
+            }
+        }
 
         public Folder GetDirectory(Guid directory)
         {

@@ -28,19 +28,19 @@ li.active {
     padding-top: 0.5em
 }
 
-    #pager .page-link {
-        background-color: lightgray;
-        border: solid grey 1px;
-        color: black;
-    }
+#pager .page-link {
+    background-color: lightgray;
+    border: solid grey 1px;
+    color: black;
+}
 
-    #pager .page-item.active .page-link {
-        background-color: grey;
-    }
+#pager .page-item.active .page-link {
+    background-color: grey;
+}
 
-    #pager .page-item.disabled .page-link {
-        color: gray;
-    }
+#pager .page-item.disabled .page-link {
+    color: gray;
+}
 
 .directory {
     font-size: 1.5em;

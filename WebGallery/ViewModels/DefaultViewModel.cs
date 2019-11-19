@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
 using DotVVM.BusinessPack.Controls;
 using DotVVM.Framework.Controls;
 using DotVVM.Framework.Storage;
@@ -144,6 +142,7 @@ namespace WebGallery.ViewModels
             // clear the data so the user can continue with other files
             UploadData.Clear();
             IsUploadDialogVisible = false;
+            ReloadData();
         }
 
         private string GetFolderPath()

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using WebGallery.BL.DAL;
 using WebGallery.BL.DTO;
 
@@ -55,6 +53,28 @@ namespace WebGallery.BL.Services
                     .OrderByDescending(item => item.CreatedDate)
                     .Skip(pageNum * pageSize)
                     .Take(pageSize).Select(item =>
+                new Photo()
+                {
+                    Id = item.Id,
+                    CreatedDate = item.CreatedDate,
+                    Description = item.Description,
+                    Metadata = item.Metadata,
+                    Name = item.Name,
+                    Parent = item.Parent,
+                    Url = item.Url
+
+                }).ToList();
+            }
+        }
+
+        public List<Photo> GetAllPhotos(Guid folderId)
+        {
+            using (var context = dbContextFactory())
+            {
+
+                return context.Photos.Where(p => p.Parent == folderId)
+                    .OrderByDescending(item => item.CreatedDate)
+                    .Select(item =>
                 new Photo()
                 {
                     Id = item.Id,

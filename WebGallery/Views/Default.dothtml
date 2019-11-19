@@ -49,13 +49,13 @@
                         <Content>
                             <bs:CardBody class="photoPreview">
                                 <bs:CheckBox CheckedValue="{value: Id}" CheckedItems="{value: _root.SelectedPhotos}" />
-                                <dot:RouteLink RouteName="PhotoDetail">
+                                <dot:RouteLink RouteName="PhotoDetail"  Param-Id="{value: Id}">
                                     <bs:Image ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
                                 </dot:RouteLink>
                             </bs:CardBody>
                         </Content>
                         <FooterTemplate>
-                            <dot:RouteLink RouteName="PhotoDetail">
+                            <dot:RouteLink RouteName="PhotoDetail" Param-Id="{value: Id}">
                                 <div class="AlignCenter">
                                     {{value: Name}}
                                     <div />

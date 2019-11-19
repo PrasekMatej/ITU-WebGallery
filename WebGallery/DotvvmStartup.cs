@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using DotVVM.BusinessPack;
 using DotVVM.Contrib;
 using DotVVM.Framework.Configuration;
@@ -21,7 +24,7 @@ namespace WebGallery
         private void ConfigureRoutes(DotvvmConfiguration config, string applicationPath)
         {
             config.RouteTable.Add("Default", "{id:guid}", "Views/Default.dothtml", new { id = Guid.Empty });
-            config.RouteTable.Add("PhotoDetail", "PhotoDetail", "Views/PhotoDetail.dothtml");
+            config.RouteTable.Add("PhotoDetail", "PhotoDetail/{Id}", "Views/PhotoDetail.dothtml");
             config.RouteTable.Add("SignIn", "SignIn", "Views/Authentication/SignIn.dothtml");
             config.RouteTable.Add("Register", "Register", "Views/Authentication/Register.dothtml");
 
