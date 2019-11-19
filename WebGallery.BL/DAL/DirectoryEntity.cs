@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace WebGallery.BL.DAL
+﻿namespace WebGallery.BL.DAL
 {
     public class DirectoryEntity : ItemEntity
     {

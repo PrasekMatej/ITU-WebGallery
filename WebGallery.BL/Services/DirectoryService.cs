@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using WebGallery.BL.DAL;
 using WebGallery.BL.DTO;
 

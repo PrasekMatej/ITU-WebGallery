@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotVVM.BusinessPack.Filters;
 using WebGallery.BL.DTO;
 
 namespace WebGallery.ViewModels

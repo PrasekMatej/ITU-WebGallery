@@ -6,7 +6,6 @@ using DotVVM.Framework.Hosting;
 using DotVVM.Framework.ViewModel.Validation;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using WebGallery.BL.DTO;
 using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels.Authentication
