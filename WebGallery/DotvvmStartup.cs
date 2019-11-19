@@ -1,9 +1,20 @@
-﻿using DotVVM.BusinessPack;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using DotVVM.BusinessPack;
 using DotVVM.Contrib;
 using DotVVM.Framework.Configuration;
 using DotVVM.Framework.Controls.Bootstrap4;
+using DotVVM.Framework.Hosting;
 using DotVVM.Framework.ResourceManagement;
+using DotVVM.Framework.Runtime;
+using DotVVM.Framework.Security;
+using DotVVM.Framework.ViewModel.Serialization;
 using Microsoft.Extensions.DependencyInjection;
+using System.Drawing;
+using System.IO;
+using System.Net.Mime;
 
 namespace WebGallery
 {
@@ -23,6 +34,7 @@ namespace WebGallery
             config.RouteTable.Add("PhotoDetail", "PhotoDetail", "Views/PhotoDetail.dothtml");
             config.RouteTable.Add("SignIn", "SignIn", "Views/Authentication/SignIn.dothtml");
             config.RouteTable.Add("Register", "Register", "Views/Authentication/Register.dothtml");
+
             //config.RouteTable.AutoDiscoverRoutes(new DefaultRouteStrategy(config));    
         }
 

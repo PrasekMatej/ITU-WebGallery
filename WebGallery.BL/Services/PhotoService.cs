@@ -16,7 +16,7 @@ namespace WebGallery.BL.Services
         {
             this.dbContextFactory = dbContextFactory;
         }
-        public void UploadPhoto(IEnumerable<Photo> photos)
+        public void UploadPhotos(IEnumerable<Photo> photos)
         {
             using (var context = dbContextFactory())
             {
@@ -30,13 +30,13 @@ namespace WebGallery.BL.Services
 
                     var photoEntity = new PhotoEntity
                     {
-                        Id = Guid.NewGuid(),
+                        Name = photo.Name,
+                        Id = photo.Id == Guid.Empty ? Guid.NewGuid() : photo.Id,
                         Parent = specDir.Id,
                         Url = photo.Url,
                         Description = photo.Description,
                         Metadata = photo.Metadata,
                         CreatedDate = photo.CreatedDate,
-                        Tags = photo.Tags.Select(tag => new TagEntity() { Name = tag.Name, Owner = tag.Owner, Id = tag.Id }).ToList(),
                     };
                     context.Photos.Add(photoEntity);
 
@@ -51,9 +51,9 @@ namespace WebGallery.BL.Services
             using (var context = dbContextFactory())
             {
 
-                return context.Photos.Include(s => s.Tags).Where(p => p.Parent == folderId)
+                return context.Photos.Where(p => p.Parent == folderId)
                     .OrderByDescending(item => item.CreatedDate)
-                    .Skip((pageNum - 1) * pageSize)
+                    .Skip(pageNum * pageSize)
                     .Take(pageSize).Select(item =>
                 new Photo()
                 {
@@ -63,12 +63,6 @@ namespace WebGallery.BL.Services
                     Metadata = item.Metadata,
                     Name = item.Name,
                     Parent = item.Parent,
-                    Tags = item.Tags.Select(tag => new Tag()
-                    {
-                        Name = tag.Name,
-                        Owner = tag.Owner,
-                        Id = tag.Id
-                    }).ToList(),
                     Url = item.Url
 
                 }).ToList();
@@ -86,7 +80,7 @@ namespace WebGallery.BL.Services
                 updatingPhoto.Name = photo.Name;
                 updatingPhoto.Description = photo.Description;
                 updatingPhoto.Url = photo.Url;
-                updatingPhoto.Tags = photo.Tags.Select(tag => new TagEntity() { Name = tag.Name, Owner = tag.Owner, Id = tag.Id }).ToList();
+                updatingPhoto.Parent = photo.Parent;
                 context.Photos.Update(updatingPhoto);
                 context.SaveChanges();
             }
@@ -104,35 +98,12 @@ namespace WebGallery.BL.Services
 
         }
 
-    }
-
-    public class TagService
-    {
-        private readonly Func<GalleryDbContext> dbContextFactory;
-
-        public TagService(Func<GalleryDbContext> dbContextFactory)
-        {
-            this.dbContextFactory = dbContextFactory;
-        }
-        public void CreateTags(ICollection<Tag> tags)
+        public int GetPhotoCount(Guid FolderId)
         {
             using (var context = dbContextFactory())
             {
-                foreach (var tag in tags)
-                {
-                    if (tag.Id != Guid.Empty) continue;
-                    var tagEntity = new TagEntity()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = tag.Name,
-                        Owner = tag.Owner
-                    };
-                    context.Add(tagEntity);
-                }
-
-                context.SaveChanges();
+                return context.Photos.Count(t => t.Parent == FolderId);
             }
         }
     }
-
 }

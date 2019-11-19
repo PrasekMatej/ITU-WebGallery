@@ -17,7 +17,7 @@
                         <dc:FAIcon Icon="trash_alt_solid" /> Delete photo
                     </bs:LinkButton>
                 </bs:NavigationItem>
-                <bs:NavigationItem  Visible="{value: _root.SelectedPhotos.Count != 0}">
+                <bs:NavigationItem Visible="{value: _root.SelectedPhotos.Count != 0}">
                     <bs:LinkButton Click="{command: OpenMoveModalDialog()}">
                         <dc:FAIcon Icon="arrows_alt_solid" /> Move photo
                     </bs:LinkButton>
@@ -36,26 +36,23 @@
             </bs:Card>
         </dot:Repeater>
         <div class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
-            <%--<bs:Card ColorDecorator.BackgroundColor="Light" Events.Click="{staticCommand: IsUploadDialogVisible=true}">
-                <Content>
-                    <bs:CardImage ImageUrl=".\upload.png" />
-                </Content>
-                <FooterTemplate>
-                    <div class="AlignCenter"><b>Upload new photo</b><div />
-                </FooterTemplate>
-            </bs:Card>--%>
-            <dot:Repeater DataSource="{value: Photos}" RenderWrapperTag="false">
+            <dot:Repeater DataSource="{value: PhotoDataset.Items}" RenderWrapperTag="false">
                 <ItemTemplate>
                     <bs:Card>
                         <Content>
                             <bs:CardBody class="photoPreview">
                                 <bs:CheckBox CheckedValue="{value: Id}" CheckedItems="{value: _root.SelectedPhotos}" />
-                                <bs:Image ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
+                                <dot:RouteLink RouteName="PhotoDetail">
+                                    <bs:Image ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
+                                </dot:RouteLink>
                             </bs:CardBody>
                         </Content>
                         <FooterTemplate>
-                            <div class="AlignCenter">
-                                {{value: Name}}<div />
+                            <dot:RouteLink RouteName="PhotoDetail">
+                                <div class="AlignCenter">
+                                    {{value: Name}}
+                                    <div />
+                            </dot:RouteLink>
                         </FooterTemplate>
                     </bs:Card>
                 </ItemTemplate>
@@ -65,11 +62,11 @@
     <div ID="BottomBar">
         <bs:Row>
             <bs:Column Size="3">
-                <div class="AlignCenter">Photos count: {{value: FakeDataset.PagingOptions.PageSize}}</div>
-                <bs:Range MinValue="10" MaxValue="100" SelectedValue="{value: FakeDataset.PagingOptions.PageSize}" />
+                <div class="AlignCenter">Photos count: {{value: PhotoDataset.PagingOptions.PageSize}}</div>
+                <bs:Range MinValue="10" MaxValue="100" SelectedValue="{value: PhotoDataset.PagingOptions.PageSize}" Changed="{command: ReloadData()}" />
             </bs:Column>
             <bs:Column Size="6">
-                <bs:DataPager id="pager" Size="Small" FlexDecorator.JustifyContent="Center" DataSet="{value: FakeDataset}" HideWhenOnlyOnePage="false" />
+                <bs:DataPager id="pager" Size="Small" FlexDecorator.JustifyContent="Center" DataSet="{value: PhotoDataset}" HideWhenOnlyOnePage="false" />
             </bs:Column>
             <bs:Column Size="3">
                 <div class="AlignCenter">Column count: {{value: ColumnCount}}</div>
@@ -115,7 +112,7 @@
             </bs:Button>
         </FooterTemplate>
     </bs:ModalDialog>
-    
+
     <bs:ModalDialog IsDisplayed="{value: IsMoveDialogVisible}">
         <ContentTemplate>
             Move modal

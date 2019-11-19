@@ -14,7 +14,7 @@ namespace WebGallery.ViewModels
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.Now,
                 Name = "aa",
-                Url = "https://picsum.photos/id/819/1920/1080",
+                Url = "https://picsum.photos/id/819/2560/1440",
                 Description = "desc"
             },
             new Photo()
@@ -22,7 +22,7 @@ namespace WebGallery.ViewModels
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.Now,
                 Name = "bb",
-                Url = "https://picsum.photos/id/822/1920/1080",
+                Url = "https://picsum.photos/id/822/2560/1440",
                 Description = "desc"
             },
             new Photo()
@@ -30,7 +30,7 @@ namespace WebGallery.ViewModels
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.Now,
                 Name = "c",
-                Url = "https://picsum.photos/id/154/1920/1080",
+                Url = "https://picsum.photos/id/154/2560/1440",
                 Description = "desc"
             }
         };

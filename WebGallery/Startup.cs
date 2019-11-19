@@ -45,7 +45,6 @@ namespace WebGallery
             services.AddTransient(typeof(UserService));
             services.AddTransient(typeof(DirectoryService));
             services.AddTransient(typeof(PhotoService));
-            services.AddTransient(typeof(TagService));
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<GalleryDbContext>(options =>
                 {
@@ -77,6 +76,7 @@ namespace WebGallery
             {
                 FileProvider = new PhysicalFileProvider(env.WebRootPath)
             });
+
         }
     }
 }

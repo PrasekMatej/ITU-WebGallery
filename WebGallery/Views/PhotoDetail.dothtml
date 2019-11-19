@@ -33,8 +33,8 @@
     <bs:ModalDialog ID="InfoWindow" IsDisplayed="{value: _root.OpenedInfo != null}">
         <HeaderTemplate>
             <h2 class="AlignCenter">
-                <dot:Literal Text="{value: OpenedInfo.Name}" Visible="{value: !_root.EditMode}"/>
-                <bs:TextBox Text="{value: OpenedInfo.Name}" Visible="{value: _root.EditMode}"/>
+                <dot:Literal Text="{value: OpenedInfo.Name}" Visible="{value: !_root.EditMode}" />
+                <bs:TextBox Text="{value: OpenedInfo.Name}" Visible="{value: _root.EditMode}" />
             </h2>
             <dot:LinkButton Visible="{value: !_root.EditMode}" Click="{staticCommand: _root.EditMode = true}">
                 <dc:FAIcon Icon="pencil_alt_solid" class="AlignLeft EditLink" />
@@ -52,12 +52,6 @@
                 <bs:Column Size="4" class="AlignRight Title">Created:</bs:Column>
                 <bs:Column Size="8">
                     <dot:Literal Text="{value: OpenedInfo.CreatedDate}" ValueType="DateTime" FormatString="g" />
-                </bs:Column>
-            </bs:Row>
-            <bs:Row DataContext="{value: OpenedInfo.Parent}" Visible="{value: !_root.EditMode}">
-                <bs:Column Size="4" class="AlignRight Title">Folder:</bs:Column>
-                <bs:Column Size="8">
-                    <dot:Literal Text="{value: Name}" />
                 </bs:Column>
             </bs:Row>
             <%--

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
@@ -9,6 +10,7 @@ using DotVVM.Framework.Storage;
 using WebGallery.BL.DTO;
 using System.Threading.Tasks;
 using DotVVM.Framework.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using WebGallery.BL.Services;
 
 namespace WebGallery.ViewModels
@@ -17,53 +19,31 @@ namespace WebGallery.ViewModels
     {
         private readonly IUploadedFileStorage fileStorage;
         private readonly DirectoryService directoryService;
+        private readonly PhotoService photoService;
+        private readonly UserService _userService;
+        private readonly IHostingEnvironment environment;
         public ICollection<Guid> SelectedPhotos { get; set; } = new List<Guid>();
-        public DefaultViewModel(IUploadedFileStorage fileStorage, DirectoryService directoryService)
+        public DefaultViewModel(IUploadedFileStorage fileStorage, DirectoryService directoryService, PhotoService photoService, UserService userService, IHostingEnvironment environment)
         {
             this.fileStorage = fileStorage;
             this.directoryService = directoryService;
-
-            CurrentFolder = new Folder
-            {
-                Id = Guid.NewGuid(),
-                Name = "Some other folder",
-                Parent = Guid.Empty
-            };
-
-            var random = new Random();
-            for (int i = 0; i < 50; i++)
-            {
-                var height = random.Next(100, 300);
-                var width = random.Next(100, 300);
-                CurrentFolderItems.Add(new Photo
-                {
-                    Id = Guid.NewGuid(),
-                    Parent = CurrentFolder.Id,
-                    CreatedDate = DateTime.Now.Subtract(TimeSpan.FromDays(i)),
-                    Name = "Photo name",
-                    Description = $"Photo description {i}",
-                    Url = $@"https://picsum.photos/id/{i}/{width}/{height}",
-                    Height = height,
-                    Width = width
-                });
-            }
-
-            CurrentPath = GetPath(CurrentFolder);
+            this.photoService = photoService;
+            _userService = userService;
+            this.environment = environment;
         }
 
-        public GridViewDataSet<string> FakeDataset { get; set; } = new GridViewDataSet<string>()
+        public GridViewDataSet<Photo> PhotoDataset { get; set; } = new GridViewDataSet<Photo>()
         {
             PagingOptions = new PagingOptions()
             {
-                TotalItemsCount = 200,
                 PageSize = 20
-            }
+            },
+            IsRefreshRequired = true
         };
 
         public ICollection<PathModel> CurrentPath { get; set; }
         public Folder CurrentFolder { get; set; }
         public ICollection<Folder> Folders => CurrentFolderItems.Where(t => t is Folder).Cast<Folder>().ToList();
-        public ICollection<Photo> Photos => CurrentFolderItems.Where(t => t is Photo).Cast<Photo>().ToList();
 
         protected ICollection<Item> CurrentFolderItems { get; set; } = new List<Item>();
 
@@ -74,6 +54,50 @@ namespace WebGallery.ViewModels
         public bool IsMoveDialogVisible { get; set; }
         public UploadData UploadData { get; set; } = new UploadData();
         public ICollection<Photo> UploadedPhotos { get; set; } = new List<Photo>();
+
+
+        public override async Task Init()
+        {
+
+            var currentUser = await _userService.GetUser(Username);
+            Guid directoryId = Guid.Parse(currentUser.Id);
+            if (Context.Parameters.ContainsKey("Path"))
+            {
+                try
+                {
+                    directoryId = (Guid)Context.Parameters["Path"];
+                }
+                catch (Exception)
+                {
+                    // use default
+                }
+            }
+
+            try
+            {
+
+                CurrentFolder = directoryService.GetDirectory(directoryId);
+            }
+            catch (Exception)
+            {
+                Context.RedirectToRoute("Default");
+            }
+
+            CurrentPath = GetPath(CurrentFolder);
+            await base.Init();
+        }
+
+        public override Task PreRender()
+        {
+            if (PhotoDataset.IsRefreshRequired)
+            {
+                PhotoDataset.Items = photoService.GetPhotos(CurrentFolder.Id, PhotoDataset.PagingOptions.PageIndex, PhotoDataset.PagingOptions.PageSize).ToList();
+                PhotoDataset.PagingOptions.TotalItemsCount = photoService.GetPhotoCount(CurrentFolder.Id);
+                PhotoDataset.IsRefreshRequired = false;
+            }
+            return base.PreRender();
+        }
+
         private ICollection<PathModel> GetPath(Folder currentFolder)
         {
             var path = new List<PathModel>();
@@ -95,6 +119,8 @@ namespace WebGallery.ViewModels
         public void Save()
         {
             var folderPath = GetFolderPath();
+            var uploadedPhotos = UploadedPhotos;
+
 
             // save all files to disk
             foreach (var file in UploadData.Files)
@@ -102,15 +128,19 @@ namespace WebGallery.ViewModels
                 var filePath = Path.Combine(folderPath, file.FileId + Path.GetExtension(file.FileName));
                 fileStorage.SaveAs(file.FileId, filePath);
                 fileStorage.DeleteFile(file.FileId);
+                uploadedPhotos.Single(t => t.Id == file.FileId).Url =
+                    $"/UserPhotos/{file.FileId + Path.GetExtension(file.FileName)}";
             }
+            photoService.UploadPhotos(uploadedPhotos);
 
             // clear the data so the user can continue with other files
             UploadData.Clear();
+            IsUploadDialogVisible = false;
         }
 
         private string GetFolderPath()
         {
-            var folderPath = Path.Combine(Context.Configuration.ApplicationPhysicalPath, "UserPhotos");
+            var folderPath = Path.Combine(environment.WebRootPath, "UserPhotos");
 
             if (!Directory.Exists(folderPath))
             {
@@ -138,7 +168,8 @@ namespace WebGallery.ViewModels
                         Id = uploadDataFile.FileId,
                         CreatedDate = DateTime.Now,
                         Name = Path.GetFileNameWithoutExtension(uploadDataFile.FileName),
-                        Url = uploadDataFile.PreviewUrl
+                        Url = uploadDataFile.PreviewUrl,
+                        Parent = CurrentFolder.Id
                     });
                 }
             }
@@ -163,6 +194,11 @@ namespace WebGallery.ViewModels
         public void OpenMoveModalDialog()
         {
             IsMoveDialogVisible = true;
+        }
+
+        public void ReloadData()
+        {
+            PhotoDataset.RequestRefresh();
         }
     }
 

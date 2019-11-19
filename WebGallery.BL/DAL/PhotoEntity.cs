@@ -9,6 +9,5 @@ namespace WebGallery.BL.DAL
         public string Description { get; set; }
         public string Metadata { get; set; }
         public DateTime CreatedDate { get; set; }
-        public ICollection<TagEntity> Tags { get; set; }
     }
 }

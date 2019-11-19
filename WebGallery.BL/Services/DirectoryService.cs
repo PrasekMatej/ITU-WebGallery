@@ -11,15 +11,17 @@ namespace WebGallery.BL.Services
 {
     public class DirectoryService
     {
-        private readonly Func<GalleryDbContext> dbContextFactory;
+        private readonly Func<GalleryDbContext> contextFactory;
+        private readonly PhotoService photoService;
 
-        public DirectoryService(Func<GalleryDbContext> dbContextFactory)
+        public DirectoryService(Func<GalleryDbContext> contextFactory, PhotoService photoService)
         {
-            this.dbContextFactory = dbContextFactory;
+            this.contextFactory = contextFactory;
+            this.photoService = photoService;
         }
         public void CreateDirectory(Folder Dir)
         {
-            using (var context = dbContextFactory())
+            using (var context = contextFactory())
             {
                 var directoryEntity = new DirectoryEntity
                 {
@@ -33,13 +35,59 @@ namespace WebGallery.BL.Services
             }
 
         }
+
+        public void MovePhoto(Photo photo, Guid newDirectory)
+        {
+            photo.Parent = newDirectory;
+            photoService.EditPhoto(photo);
+        }
+
+
+        public void DeleteDirectory(Folder dir)
+        {
+            using (var context = contextFactory())
+            {
+                var toDelete = context.Directories.Find(dir.Id);
+                if (toDelete == null)
+                {
+                    return;
+                }
+
+                var photos = context.Photos.Where(t => t.Parent == dir.Id);
+                context.Photos.RemoveRange(photos);
+
+                context.Directories.Remove(toDelete);
+                context.SaveChanges();
+            }
+
+        }
+
+
+        public Folder GetDirectory(Guid directory)
+        {
+            using (var context = contextFactory())
+            {
+                var directoryEntity = context.Directories.Find(directory);
+                if (directoryEntity == null)
+                {
+                    return null;
+                }
+
+                return new Folder()
+                {
+                    Parent = directoryEntity.Parent,
+                    Name = directoryEntity.Name,
+                    Id = directoryEntity.Id
+                };
+            }
+        }
         public void CreateUserRootDirectory(IdentityUser user)
         {
-            using (var context = dbContextFactory())
+            using (var context = contextFactory())
             {
                 var directoryEntity = new DirectoryEntity
                 {
-                    Id = Guid.Parse(user.Id),
+                    Id = new Guid(user.Id),
                     Parent = Guid.Empty,
                     Name = user.UserName,
                 };
@@ -48,65 +96,6 @@ namespace WebGallery.BL.Services
                 context.SaveChanges();
             }
 
-        }
-
-        public void MovePhoto(Photo photo, Guid targetDirectory)
-        {
-            using (var context = dbContextFactory())
-            {
-                var foundPhoto = context.Photos.Find(photo.Id);
-                foundPhoto.Parent = targetDirectory;
-                context.Update(foundPhoto);
-                context.SaveChanges();
-            }
-        }
-
-
-        public void DeleteDirectory(Folder dir)
-        {
-            using (var context = dbContextFactory())
-            {
-                var toDelete = context.Directories.Find(dir.Id);
-                if (toDelete == null)
-                {
-                    return;
-                }
-                DeleteAllPhotosInDirectory(toDelete.Id);
-
-                context.Directories.Remove(toDelete);
-                context.SaveChanges();
-            }
-
-        }
-
-        public void DeleteAllPhotosInDirectory(Guid id)
-        {
-            using (var context = dbContextFactory())
-            {
-                context.Photos.RemoveRange(context.Photos.Where(t => t.Parent == id).ToArray());
-                context.SaveChanges();
-            }
-        }
-
-        public Folder GetDirectory(Guid id)
-        {
-            using (var context = dbContextFactory())
-            {
-                var directoryEntity = context.Directories.Find(id);
-                if (directoryEntity == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return new Folder()
-                    {
-                        Parent = directoryEntity.Parent,
-                        Name = directoryEntity.Name,
-                        Id = directoryEntity.Id
-                    };
-                }
-            }
         }
     }
 }
