@@ -59,6 +59,13 @@ namespace WebGallery.BL.Services
 
         }
 
+        public Guid GetParentGuid(Guid id)
+        {
+            using (var context = contextFactory())
+            {
+                return context.Photos.Find(id).Parent;
+            }
+        }
 
         public Folder GetDirectory(Guid directory)
         {

@@ -133,6 +133,7 @@ namespace WebGallery.ViewModels
             // clear the data so the user can continue with other files
             UploadData.Clear();
             IsUploadDialogVisible = false;
+            ReloadData();
         }
 
         private string GetFolderPath()

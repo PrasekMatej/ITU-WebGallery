@@ -4,9 +4,9 @@
 <dot:Content ContentPlaceHolderID="MainContent">
     <dot:RequiredResource Name="PhotoDetailStyles"></dot:RequiredResource>
     <div ID="PhotoDetail">
-        <bs:Carousel DataSource="{value: Photos}" ImageUrlBinding="{value: Url}" ImageAlternateTextBinding="{value: Name}" RenderIndicators="false">
+        <bs:Carousel DataSource="{value: Photos}"  ImageUrlBinding="{value: Url}" ImageAlternateTextBinding="{value: Name}" RenderIndicators="false">
             <LeftControlTemplate>
-                <div class="BackgroundNavigationLeft fading Navigation NavigationLeft"><dc:FAIcon class="NavigationIcon" Icon="angle_left_solid" /></div>
+                <div class="BackgroundNavigationLeft fading Navigation NavigationLeft"><dc:FAIcon class="NavigationIcon" Icon="angle_left_solid"/></div>
             </LeftControlTemplate>
             <RightControlTemplate>
                 <div class="BackgroundNavigationRight fading Navigation NavigationRight"><dc:FAIcon class="NavigationIcon" Icon="angle_right_solid" /></div>
