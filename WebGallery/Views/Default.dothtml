@@ -4,7 +4,7 @@
 <dot:Content ContentPlaceHolderID="MainContent">
     <dot:RequiredResource Name="PhotoListStyles" />
     <div ID="Content">
-        <bs:Breadcrumb DataSource="{value: CurrentPath}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.CurrentPath.Count==_index+1}" NavigateUrlBinding="{value: "www.google.com"}" />
+        <bs:Breadcrumb DataSource="{value: CurrentPath}" TextBinding="{value: Name}" IsSelectedBinding="{value: _root.CurrentPath.Count==_index+1}" NavigateUrlBinding="{value: '/'+Id}" />
         <bs:NavigationBar>
             <Items>
                 <bs:NavigationItem>
@@ -12,14 +12,19 @@
                         <dc:FAIcon Icon="plus_circle_solid" /> Upload photo
                     </bs:LinkButton>
                 </bs:NavigationItem>
+                <bs:NavigationItem>
+                    <bs:LinkButton Type="Info" Click="{staticCommand: IsCreateDirectoryModalDisplayed=true}">
+                        <dc:FAIcon Icon="plus_circle_solid" /> Create directory
+                    </bs:LinkButton>
+                </bs:NavigationItem>
                 <bs:NavigationItem Visible="{value: _root.SelectedPhotos.Count != 0}">
                     <bs:LinkButton Type="Danger" Click="{staticCommand: IsDeleteDialogVisible=true}">
-                        <dc:FAIcon Icon="trash_alt_solid" /> Delete photo
+                        <dc:FAIcon Icon="trash_alt_solid" /> Delete photos
                     </bs:LinkButton>
                 </bs:NavigationItem>
                 <bs:NavigationItem Visible="{value: _root.SelectedPhotos.Count != 0}">
                     <bs:LinkButton Click="{command: OpenMoveModalDialog()}">
-                        <dc:FAIcon Icon="arrows_alt_solid" /> Move photo
+                        <dc:FAIcon Icon="arrows_alt_solid" /> Move photos
                     </bs:LinkButton>
                 </bs:NavigationItem>
             </Items>
@@ -28,9 +33,11 @@
             <bs:Card>
                 <Content>
                     <bs:CardBody>
-                        <div class="AlignCenter directory">
-                            <dc:FAIcon Icon="folder_solid" />
-                            {{value: Name}}<div />
+                        <dot:RouteLink RouteName="Default" Param-id="{value: Id}">
+                            <div class="AlignCenter directory">
+                                <dc:FAIcon Icon="folder_solid" />
+                                {{value: Name}}<div />
+                        </dot:RouteLink>
                     </bs:CardBody>
                 </Content>
             </bs:Card>
@@ -107,15 +114,34 @@
             Do you really want to delete {{value: SelectedPhotos.Count}} photos?
         </ContentTemplate>
         <FooterTemplate>
-            <bs:Button Type="Danger">
+            <bs:Button Type="Danger" Click="{command: DeletePhotos()}">
                 <dc:FAIcon Icon="trash_alt_solid" /> Delete
             </bs:Button>
         </FooterTemplate>
     </bs:ModalDialog>
+    <bs:ModalDialog IsDisplayed="{value: IsCreateDirectoryModalDisplayed}">
+        <ContentTemplate>
+            <bs:InputGroup>
+                <LeftTemplate>
+                    <bs:InputGroupLiteral Text="Directory name" />
+                </LeftTemplate>
+                <ContentTemplate>
+                    <bs:InputGroupTextBox Text="{value: NewDirectoryName}" />
+                </ContentTemplate>
+                <RightTemplate>
+                    <bs:InputGroupButton Text="Create" Click="{command: CreateDirectory()}" />
+                </RightTemplate>
+            </bs:InputGroup>
+        </ContentTemplate>
+    </bs:ModalDialog>
 
     <bs:ModalDialog IsDisplayed="{value: IsMoveDialogVisible}">
         <ContentTemplate>
-            Move modal
+            <bp:HierarchyRepeater LevelTagName="ul" ItemTagName="li" DataSource="{value: DirStructure}" ItemChildrenBinding="{value: ChildFolders}">
+                <ItemTemplate>
+                    <dot:LinkButton Text="{value: Name}" Click="{command: _root.MovePhotos(Id)}" />
+                </ItemTemplate>
+            </bp:HierarchyRepeater>
         </ContentTemplate>
     </bs:ModalDialog>
 

@@ -1,6 +1,11 @@
 ﻿.item-container {
     padding-right: 5%;
     padding-left: 5%;
+    padding-top: 10px;
+}
+
+li.active {
+    font-weight: bold;
 }
 
 #BottomBar {
@@ -67,11 +72,11 @@
     padding: 0;
 }
 
-.photoPreview > div > input {
-    position: absolute !important;
-    right: 10px;
-    top: 10px;
-}
+    .photoPreview > div > input {
+        position: absolute !important;
+        right: 10px;
+        top: 10px;
+    }
 
 .breadcrumb {
     margin-bottom: 0;

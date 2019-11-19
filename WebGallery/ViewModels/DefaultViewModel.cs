@@ -10,6 +10,7 @@ using DotVVM.Framework.Storage;
 using WebGallery.BL.DTO;
 using System.Threading.Tasks;
 using DotVVM.Framework.Hosting;
+using DotVVM.Framework.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using WebGallery.BL.Services;
 
@@ -43,9 +44,8 @@ namespace WebGallery.ViewModels
 
         public ICollection<PathModel> CurrentPath { get; set; }
         public Folder CurrentFolder { get; set; }
-        public ICollection<Folder> Folders => CurrentFolderItems.Where(t => t is Folder).Cast<Folder>().ToList();
+        public ICollection<Folder> Folders { get; set; }
 
-        protected ICollection<Item> CurrentFolderItems { get; set; } = new List<Item>();
 
         public int ColumnCount { get; set; } = 6;
 
@@ -55,36 +55,42 @@ namespace WebGallery.ViewModels
         public UploadData UploadData { get; set; } = new UploadData();
         public ICollection<Photo> UploadedPhotos { get; set; } = new List<Photo>();
 
-
-        public override async Task Init()
+        public override async Task Load()
         {
-
-            var currentUser = await _userService.GetUser(Username);
-            Guid directoryId = Guid.Parse(currentUser.Id);
-            if (Context.Parameters.ContainsKey("Path"))
+            if (!Context.IsPostBack)
             {
+                var currentUser = await _userService.GetUser(Username);
+                Guid directoryId = Guid.Parse(currentUser.Id);
+                if (Context.Parameters.ContainsKey("id"))
+                {
+                    try
+                    {
+                        var contextParameter = Guid.Parse(Context.Parameters["id"].ToString());
+                        if (contextParameter != Guid.Empty)
+                        {
+                            directoryId = contextParameter;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // use default
+                    }
+                }
+
                 try
                 {
-                    directoryId = (Guid)Context.Parameters["Path"];
+
+                    CurrentFolder = directoryService.GetDirectory(directoryId);
                 }
                 catch (Exception)
                 {
-                    // use default
+                    Context.RedirectToRoute("Default");
                 }
+
+                CurrentPath = GetPath(CurrentFolder);
             }
 
-            try
-            {
-
-                CurrentFolder = directoryService.GetDirectory(directoryId);
-            }
-            catch (Exception)
-            {
-                Context.RedirectToRoute("Default");
-            }
-
-            CurrentPath = GetPath(CurrentFolder);
-            await base.Init();
+            await base.Load();
         }
 
         public override Task PreRender()
@@ -94,6 +100,8 @@ namespace WebGallery.ViewModels
                 PhotoDataset.Items = photoService.GetPhotos(CurrentFolder.Id, PhotoDataset.PagingOptions.PageIndex, PhotoDataset.PagingOptions.PageSize).ToList();
                 PhotoDataset.PagingOptions.TotalItemsCount = photoService.GetPhotoCount(CurrentFolder.Id);
                 PhotoDataset.IsRefreshRequired = false;
+
+                Folders = directoryService.GetChildDirectories(CurrentFolder.Id);
             }
             return base.PreRender();
         }
@@ -158,7 +166,6 @@ namespace WebGallery.ViewModels
 
         public void UploadCompleted()
         {
-
             foreach (var uploadDataFile in UploadData.Files)
             {
                 if (!UploadedPhotos.Any(t => t.Id == uploadDataFile.FileId))
@@ -179,26 +186,54 @@ namespace WebGallery.ViewModels
 
         public void GoToFolder(Guid destination)
         {
-            //TODO
+            CurrentFolder = directoryService.GetDirectory(destination);
+            ReloadData();
         }
         public void MovePhotos(Guid destination)
         {
-            //TODO
+            directoryService.MovePhotos(SelectedPhotos, destination);
+            SelectedPhotos.Clear();
+            IsMoveDialogVisible = false;
+            DirStructure = null;
+            ReloadData();
         }
 
         public void DeletePhotos()
         {
-            //TODO
+            photoService.DeletePhotos(SelectedPhotos);
+            SelectedPhotos.Clear();
+            IsDeleteDialogVisible = false;
+            ReloadData();
         }
 
-        public void OpenMoveModalDialog()
+        public async Task OpenMoveModalDialog()
         {
+
+            Guid userId = new Guid((await _userService.GetUser(Username)).Id);
+            DirStructure = new List<FolderHierarchy>() { directoryService.GetDirectoryStructure(userId, CurrentFolder.Id) };
             IsMoveDialogVisible = true;
         }
+
+        public ICollection<FolderHierarchy> DirStructure { get; set; }
 
         public void ReloadData()
         {
             PhotoDataset.RequestRefresh();
+        }
+
+        public bool IsCreateDirectoryModalDisplayed { get; set; }
+        public string NewDirectoryName { get; set; }
+
+        public void CreateDirectory()
+        {
+            IsCreateDirectoryModalDisplayed = false;
+            directoryService.CreateDirectory(new Folder()
+            {
+                Parent = CurrentFolder.Id,
+                Name = NewDirectoryName
+            });
+            NewDirectoryName = null;
+            ReloadData();
         }
     }
 

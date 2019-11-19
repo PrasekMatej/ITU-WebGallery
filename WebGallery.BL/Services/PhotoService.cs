@@ -86,16 +86,18 @@ namespace WebGallery.BL.Services
             }
         }
 
-        public void DeletePhoto(Photo photo)
+        public void DeletePhotos(IEnumerable<Guid> photoIds)
         {
             using (var context = dbContextFactory())
             {
-                var toDelete = context.Photos.Find(photo.Id);
-
-                context.Photos.Remove(toDelete);
+                var photosToDelete = new List<PhotoEntity>();
+                foreach (var photoId in photoIds)
+                {
+                    photosToDelete.Add(context.Photos.Find(photoId));
+                }
+                context.Photos.RemoveRange(photosToDelete);
                 context.SaveChanges();
             }
-
         }
 
         public int GetPhotoCount(Guid FolderId)

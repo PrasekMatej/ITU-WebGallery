@@ -1,20 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using DotVVM.BusinessPack;
 using DotVVM.Contrib;
 using DotVVM.Framework.Configuration;
 using DotVVM.Framework.Controls.Bootstrap4;
-using DotVVM.Framework.Hosting;
 using DotVVM.Framework.ResourceManagement;
-using DotVVM.Framework.Runtime;
-using DotVVM.Framework.Security;
-using DotVVM.Framework.ViewModel.Serialization;
 using Microsoft.Extensions.DependencyInjection;
-using System.Drawing;
-using System.IO;
-using System.Net.Mime;
 
 namespace WebGallery
 {
@@ -30,7 +20,7 @@ namespace WebGallery
 
         private void ConfigureRoutes(DotvvmConfiguration config, string applicationPath)
         {
-            config.RouteTable.Add("Default", "", "Views/Default.dothtml");
+            config.RouteTable.Add("Default", "{id:guid}", "Views/Default.dothtml", new { id = Guid.Empty });
             config.RouteTable.Add("PhotoDetail", "PhotoDetail", "Views/PhotoDetail.dothtml");
             config.RouteTable.Add("SignIn", "SignIn", "Views/Authentication/SignIn.dothtml");
             config.RouteTable.Add("Register", "Register", "Views/Authentication/Register.dothtml");

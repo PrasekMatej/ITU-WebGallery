@@ -12,12 +12,10 @@ namespace WebGallery.BL.Services
     public class DirectoryService
     {
         private readonly Func<GalleryDbContext> contextFactory;
-        private readonly PhotoService photoService;
 
-        public DirectoryService(Func<GalleryDbContext> contextFactory, PhotoService photoService)
+        public DirectoryService(Func<GalleryDbContext> contextFactory)
         {
             this.contextFactory = contextFactory;
-            this.photoService = photoService;
         }
         public void CreateDirectory(Folder Dir)
         {
@@ -36,10 +34,18 @@ namespace WebGallery.BL.Services
 
         }
 
-        public void MovePhoto(Photo photo, Guid newDirectory)
+        public void MovePhotos(IEnumerable<Guid> photoIds, Guid newDirectory)
         {
-            photo.Parent = newDirectory;
-            photoService.EditPhoto(photo);
+            using (var context = contextFactory())
+            {
+                foreach (var photoId in photoIds)
+                {
+                    var photoEntity = context.Photos.Find(photoId);
+                    photoEntity.Parent = newDirectory;
+                }
+
+                context.SaveChanges();
+            }
         }
 
 
@@ -97,5 +103,64 @@ namespace WebGallery.BL.Services
             }
 
         }
+
+        public FolderHierarchy GetDirectoryStructure(Guid rootId, Guid currentId)
+        {
+            var dict = new Dictionary<Guid, FolderHierarchy>();
+            using (var context = contextFactory())
+            {
+                var root = createFolderHierarchy(context.Directories.Find(rootId), currentId);
+                var toExplore = new Queue<DirectoryEntity>(context.Directories.Where(t => t.Parent == rootId).ToList());
+                dict.Add(rootId, root);
+
+                while (toExplore.Count != 0)
+                {
+                    var dir = toExplore.Dequeue();
+                    var currentFolder = dict[dir.Parent];
+                    var folderHierarchy = createFolderHierarchy(dir, currentId);
+                    dict.Add(dir.Id, folderHierarchy);
+                    currentFolder.ChildFolders.Add(folderHierarchy);
+
+                    var childDirs = context.Directories.Where(t => t.Parent == dir.Id).ToList();
+                    foreach (var childDir in childDirs)
+                    {
+                        toExplore.Enqueue(childDir);
+                    }
+                }
+
+                return root;
+            }
+        }
+
+        protected FolderHierarchy createFolderHierarchy(DirectoryEntity dir, Guid currentId)
+        {
+            return new FolderHierarchy()
+            {
+                IsCurrent = dir.Id == currentId,
+                Parent = dir.Parent,
+                Name = dir.Name,
+                Id = dir.Id,
+                ChildFolders = new List<FolderHierarchy>()
+            };
+        }
+
+        public IList<Folder> GetChildDirectories(Guid id)
+        {
+            using (var context = contextFactory())
+            {
+                return context.Directories.Where(t => t.Parent == id).Select(t => new Folder()
+                {
+                    Name = t.Name,
+                    Parent = t.Parent,
+                    Id = t.Id
+                }).ToList();
+            }
+        }
+    }
+
+    public class FolderHierarchy : Folder
+    {
+        public bool IsCurrent { get; set; }
+        public ICollection<FolderHierarchy> ChildFolders { get; set; }
     }
 }
