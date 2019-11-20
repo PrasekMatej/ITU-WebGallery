@@ -19,10 +19,11 @@ namespace WebGallery.ViewModels
         public List<Photo> Photos { get; set; }
         public Photo OpenedInfo { get; set; }
         public bool EditMode { get; set; }
+        public Guid ParentGuid => DirectoryService.GetParentGuid(PhotoId);
+
         public override Task Init()
         {
-            var folderGuid = DirectoryService.GetParentGuid(PhotoId);
-            Photos = PhotoService.GetAllPhotos(folderGuid);
+            Photos = PhotoService.GetAllPhotos(ParentGuid);
             return base.Init();
         }
 
