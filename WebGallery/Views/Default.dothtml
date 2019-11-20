@@ -27,6 +27,10 @@
                         <dc:FAIcon Icon="arrows_alt_solid" /> Move photos
                     </bs:LinkButton>
                 </bs:NavigationItem>
+
+                <bs:NavigationItem ID="checkAll">
+                    <bs:CheckBox Text="Select all" Changed="{command: SelectAll()}" Checked="{value: SelectAllChecked}" />
+                </bs:NavigationItem>
             </Items>
         </bs:NavigationBar>
         <dot:Repeater DataSource="{value: Folders}" RenderWrapperTag="true" class="item-container card-columns" style="{value: "-webkit-column-count: " + ColumnCount + " !important;column-count: " + ColumnCount + " !important;"}">
@@ -49,7 +53,7 @@
                         <Content>
                             <bs:CardBody class="photoPreview">
                                 <bs:CheckBox CheckedValue="{value: Id}" CheckedItems="{value: _root.SelectedPhotos}" />
-                                <dot:RouteLink RouteName="PhotoDetail"  Param-Id="{value: Id}">
+                                <dot:RouteLink RouteName="PhotoDetail" Param-Id="{value: Id}">
                                     <bs:Image ImageUrl="{value: Url}" AlternateText="{value: Name}" Width="100%" ToolTip="{value: Description}" />
                                 </dot:RouteLink>
                             </bs:CardBody>

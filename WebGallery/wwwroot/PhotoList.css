@@ -28,19 +28,19 @@ li.active {
     padding-top: 0.5em
 }
 
-#pager .page-link {
-    background-color: lightgray;
-    border: solid grey 1px;
-    color: black;
-}
+    #pager .page-link {
+        background-color: lightgray;
+        border: solid grey 1px;
+        color: black;
+    }
 
-#pager .page-item.active .page-link {
-    background-color: grey;
-}
+    #pager .page-item.active .page-link {
+        background-color: grey;
+    }
 
-#pager .page-item.disabled .page-link {
-    color: gray;
-}
+    #pager .page-item.disabled .page-link {
+        color: gray;
+    }
 
 .directory {
     font-size: 1.5em;
@@ -76,8 +76,18 @@ li.active {
         position: absolute !important;
         right: 10px;
         top: 10px;
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FF */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
+        transform: scale(1.5);
     }
 
 .breadcrumb {
     margin-bottom: 0;
+}
+
+#checkAll {
+    right: 0;
+    position: absolute;
 }

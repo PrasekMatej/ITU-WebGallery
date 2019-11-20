@@ -181,6 +181,19 @@ namespace WebGallery.ViewModels
             }
         }
 
+        public bool SelectAllChecked { get; set; }
+        public void SelectAll()
+        {
+            if (SelectAllChecked)
+            {
+                SelectedPhotos = photoService.GetAllPhotosIds(CurrentFolder.Id);
+            }
+            else
+            {
+                SelectedPhotos.Clear();
+            }
+        }
+
         public ICollection<Folder> CurrentlyBrowsedDirectories { get; set; }
 
         public void GoToFolder(Guid destination)

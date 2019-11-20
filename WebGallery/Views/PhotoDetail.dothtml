@@ -4,15 +4,15 @@
 <dot:Content ContentPlaceHolderID="MainContent">
     <dot:RequiredResource Name="PhotoDetailStyles"></dot:RequiredResource>
     <div ID="PhotoDetail">
-        <bs:Carousel DataSource="{value: Photos}"  ImageUrlBinding="{value: Url}" ImageAlternateTextBinding="{value: Name}" RenderIndicators="false">
+        <bs:Carousel DataSource="{value: Photos}" ImageUrlBinding="{value: Photo.Url}" ImageAlternateTextBinding="{value: Photo.Name}" IsActiveBinding="{value: IsActive}" RenderIndicators="false">
             <LeftControlTemplate>
-                <div class="BackgroundNavigationLeft fading Navigation NavigationLeft"><dc:FAIcon class="NavigationIcon" Icon="angle_left_solid"/></div>
+                <div class="BackgroundNavigationLeft fading Navigation NavigationLeft"><dc:FAIcon class="NavigationIcon" Icon="angle_left_solid" /></div>
             </LeftControlTemplate>
             <RightControlTemplate>
                 <div class="BackgroundNavigationRight fading Navigation NavigationRight"><dc:FAIcon class="NavigationIcon" Icon="angle_right_solid" /></div>
             </RightControlTemplate>
             <CaptionTemplate>
-                <div class="BackgroundNavigationBottom fading">
+                <div class="BackgroundNavigationBottom fading" DataContext="{value: Photo}">
                     <div class="fading PhotoDescription">
                         <p>
                             <dot:RouteLink RouteName="Default" Param-id="{value: _root.ParentGuid}">
@@ -54,12 +54,6 @@
                     <dot:Literal Text="{value: OpenedInfo.CreatedDate}" ValueType="DateTime" FormatString="g" />
                 </bs:Column>
             </bs:Row>
-            <%--
-            TODO
-            <bs:Row>
-                <bs:Column Size="4" class="AlignRight Title">Tags:</bs:Column>
-                <bs:Column Size="8"><dot:Literal text="{value: Tags}" /></bs:Column>
-            </bs:Row>--%>
             <bs:Row Visible="{value: OpenedInfo.Metadata != null && OpenedInfo.Metadata != "" && !_root.EditMode}">
                 <bs:Column Size="4" class="AlignRight Title">Metadata:</bs:Column>
                 <bs:Column Size="8">

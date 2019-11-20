@@ -33,8 +33,7 @@
     height: 800px;
     margin: 0 0 -500px;
     background: rgb(0,0,0);
-    background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%),
-                radial-gradient(circle closest-side, black, transparent);
+    background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), radial-gradient(circle closest-side, black, transparent);
     opacity: 0.1;
 }
 
@@ -96,4 +95,8 @@
     object-fit: contain;
     display: block;
     margin: 0 auto;
+}
+
+.carousel-item {
+    background-color: #2f2f2f;
 }

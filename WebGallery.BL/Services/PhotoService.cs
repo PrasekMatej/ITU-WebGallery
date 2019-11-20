@@ -88,6 +88,16 @@ namespace WebGallery.BL.Services
                 }).ToList();
             }
         }
+        public List<Guid> GetAllPhotosIds(Guid folderId)
+        {
+            using (var context = dbContextFactory())
+            {
+
+                return context.Photos.Where(p => p.Parent == folderId)
+                    .OrderByDescending(item => item.CreatedDate)
+                    .Select(item => item.Id).ToList();
+            }
+        }
 
         public void EditPhoto(Photo photo)
         {
