@@ -15,7 +15,7 @@
                 <div class="BackgroundNavigationBottom fading">
                     <div class="fading PhotoDescription">
                         <p>
-                            <dot:RouteLink RouteName="Default">
+                            <dot:RouteLink RouteName="Default" Param-id="{value: _root.ParentGuid}">
                                 <dc:FAIcon Icon="home_solid" title="Back to all photos" class="HomeLink" />
                             </dot:RouteLink>
                             <dot:LinkButton Click="{staticCommand: _root.OpenedInfo = _this}">
