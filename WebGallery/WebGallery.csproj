@@ -41,11 +41,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Update="wwwroot\UserPhotos\12e13093-e811-84d0-f6d5-7c6adf4e8b1a.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Controls\" />
   </ItemGroup>
 </Project>
