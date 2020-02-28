@@ -40,7 +40,7 @@ namespace WebGallery
             };
             config.AddBootstrap4Configuration(dotvvmBootstrapOptions);
             config.AddContribFAIconConfiguration();
-            config.AddContribGoogleMapConfiguration("AIzaSyCGPSZzWUXLrGJsYQb4QnMH4Yl4rf1b9V0");
+            config.AddContribGoogleMapConfiguration();
         }
 
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
